@@ -13,17 +13,17 @@ package jp.pixels.pb
 		public static const IMAGE_BK_IPAD:String = "IMAGE_BK_IPAD";
 		public static const IMAGE_LOAD_CIRCLE:String = "IMAGE_LOAD_CIRCLE";
 		
-		[Embed("../../../../../resource/image/icon/arrow-left.png")]
+		[Embed("../../../../res/image/icon/arrow-left.png")]
 		private static const ImageArrowLeft:Class;
-		[Embed("../../../../../resource/image/icon/arrow-right.png")]
+		[Embed("../../../../res/image/icon/arrow-right.png")]
 		private static const ImageArrowRight:Class;
-		[Embed("../../../../../resource/image/icon/upload.png")]
+		[Embed("../../../../res/image/icon/upload.png")]
 		private static const ImageUpload:Class;
-		[Embed("../../../../../resource/image/icon/trash.png")]
+		[Embed("../../../../res/image/icon/trash.png")]
 		private static const ImageTrash:Class;
-		[Embed("../../../../../resource/image/bk/ipad.png")]
+		[Embed("../../../../res/image/bk/ipad.png")]
 		private static const ImageIPad:Class;
-		[Embed("../../../../../resource/image/load/circle.png")]
+		[Embed("../../../../res/image/load/circle.png")]
 		private static const ImageLoadCircle:Class;
 
 		public function ResourceProvider() {
