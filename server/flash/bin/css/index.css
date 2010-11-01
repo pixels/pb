@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+body {
+	width: 99%;
+	height: 768px;
+	text-align: center;
+	
+	background-color: #000000;
+}
+
+p, a {
+	color: #cccccc;
+	font-weight: 100px;
+	font-size: 10px;
+    text-decoration: none;
+}
+
+h1, h2, h3, h4, p {
+	font-family: "MS UI Gothic", "HiraKakuPro-W6", sans-serif;
+	color: #cccccc;
+}
+
+#mainFrameID {
+	width: 1200px;
+	margin: 0 auto;
+}
+
+#contentFrameID {
+	width: 1024px;
+	height: 768px;
+	margin: 0 auto;
+	
+	border-style:solid;
+	border-color:#888888; 
+}
+
+#fc2_qr_code_header {
+	display: none;
+}
