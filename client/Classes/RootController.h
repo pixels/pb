@@ -40,6 +40,7 @@
 @property (nonatomic, retain) IBOutlet UILabel *titleLabel;
 @property (nonatomic, retain) IBOutlet UILabel *authorLabel;
 
+- (IBAction)onFemaleTouchUpInside:(id)sender;
 - (IBAction)onBackTouchUpInside:(id)sender;
 - (IBAction)onForwardTouchUpInside:(id)sender;
 

@@ -161,10 +161,26 @@
     if (visible) {
 		if ([[self getModels].voicePackCollection count] < MAX_VOICE_PACK) {
 			if ( !addButton_) {
+#ifdef IPHONE
+				UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 480, 32)];
+				[v setBackgroundColor:[UIColor whiteColor]];
+				[self.navigationItem setTitleView:v];
+				UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+				[btn addTarget:self action:@selector(onAddTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+				[btn.imageView setContentMode:UIViewContentModeScaleAspectFit];
+				[btn setShowsTouchWhenHighlighted:YES];
+				[btn setFrame:CGRectMake(0, 0, 24, 24)];
+				[btn setTitle:nil forState:UIControlStateNormal];
+				[v addSubview:btn];
+				addButton_ = [[UIBarButtonItem alloc] initWithCustomView:v];
+				[self.navigationItem setRightBarButtonItem:addButton_ animated:YES];
+				[v release];
+#else
 				addButton_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
 																		   target:self
 																		   action:@selector(onAddTouchUpInside:)];
 				[self.navigationItem setLeftBarButtonItem:addButton_ animated:YES];
+#endif
 			}
 		}
 		else {

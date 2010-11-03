@@ -358,7 +358,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>RootController</string>
 					<string>UIResponder</string>
-					<string>{{401, 83}, {1024, 768}}</string>
+					<string>{{645, 147}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -390,7 +390,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">60</int>
+			<int key="maxID">61</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -403,10 +403,12 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>onBackTouchUpInside:</string>
+							<string>onFemaleTouchUpInside:</string>
 							<string>onForwardTouchUpInside:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>
@@ -416,12 +418,17 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>onBackTouchUpInside:</string>
+							<string>onFemaleTouchUpInside:</string>
 							<string>onForwardTouchUpInside:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
 								<string key="name">onBackTouchUpInside:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">onFemaleTouchUpInside:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

@@ -88,10 +88,6 @@
 	voicePackList_ = [[NSMutableArray alloc] init];
 	[self reloadVoicePackButton];
 	
-#ifndef IPHONE
-	CGSize popSize = CGSizeMake(480, 320);
-	voicePackViewSize_ = CGSizeMake(480, 276);
-	
 	voicePackSelectController_ = [[VoicePackSelectController alloc] initWithNibNameAndValue:@"VoicePackSelectView" bundle:nil];
 	UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithTitle:@"編集"
 																style:UIBarStyleDefault
@@ -100,6 +96,10 @@
 	[voicePackSelectController_ setTitle:@"ボイスの選択"];
 	[voicePackSelectController_.navigationItem setRightBarButtonItem:barItem animated:NO];
 	[barItem release];
+	
+#ifndef IPHONE
+	CGSize popSize = CGSizeMake(480, 320);
+	voicePackViewSize_ = CGSizeMake(480, 276);
 	
 	navController_ = [[UINavigationController alloc] initWithRootViewController:voicePackSelectController_];
 	navController_.navigationBar.barStyle = UIBarStyleBlackTranslucent;
@@ -356,14 +356,24 @@
 }
 
 - (IBAction)onFemaleTouchUpInside:(id)sender {
+	BookInfo *bookInfo = [[self getModels].bookCollection getAtIndex:flowIndex_];
+#ifdef IPHONE
+//	VoicePackSelectController *ctrl = [[VoicePackSelectController alloc] initWithNibNameAndValue:@"VoicePackSelectView" bundle:nil];
+	[voicePackSelectController_ reload:bookInfo.bookID];
+//	[ctrl reload:bookInfo.bookID];
+	
+	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
+	[appDelegate.navController pushViewController:voicePackSelectController_ animated:YES];
+//	[ctrl release];
+#else
 	if (popoverController_.popoverVisible) {
 		[popoverController_ dismissPopoverAnimated:YES];
 	}
 	else {
-		BookInfo *bookInfo = [[self getModels].bookCollection getAtIndex:flowIndex_];
 		[voicePackSelectController_ reload:bookInfo.bookID];
 		[popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
 	}
+#endif
 }
 
 - (IBAction)onBackTouchUpInside:(id)sender {
