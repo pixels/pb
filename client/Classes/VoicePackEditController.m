@@ -42,8 +42,7 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Overriden to allow any orientation.
-    return YES;
+    return (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight);
 }
 
 - (void)dealloc {
@@ -105,4 +104,7 @@
 	[self selectIconButton:btn.tag];
 }
 
+- (IBAction)onCloseSoftwareKeyboard:(id)sender {
+	[textField_ resignFirstResponder];
+}
 @end

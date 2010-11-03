@@ -21,5 +21,7 @@
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
 - (void)setVoiceIndex:(NSUInteger)index;
+- (IBAction)onIconButtonTouchUpInside:(id)sender;
+- (IBAction)onCloseSoftwareKeyboard:(id)sender;
 
 @end

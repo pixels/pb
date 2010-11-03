@@ -15,6 +15,7 @@
 #define VOICE_PACK_DEFAULT_NAME @"新しいボイスパック"
 
 @interface VoicePackSelectController (InternalMethods)
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated;
 - (void)onAddTouchUpInside:(id)sender;
 @end
 
@@ -28,6 +29,10 @@
 //		[self setupAddButton:YES];
     }
     return self;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight);
 }
 
 - (void)dealloc {
@@ -181,6 +186,7 @@
 	}
 	else {
 		if (editing_) {
+			[self setEditing:NO animated:NO];
 			NSNumber *row = [NSNumber numberWithUnsignedInt:[indexPath row]];
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"PUSH_EDIT_VOICE_PACK_EVENT" object:row userInfo:nil];
 		}

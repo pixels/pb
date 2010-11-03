@@ -339,10 +339,16 @@
 }
 
 - (void)onPushEditVoicePack:(NSNotification *)notification {
+	NSLog(@"onPushEditVoicePack");
 	NSNumber *row = (NSNumber *)[notification object];
 	VoicePackEditController *ctrl = [[VoicePackEditController alloc] initWithNibName:@"VoicePackEditView" bundle:nil];
+#ifdef IPHONE
+	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
+	[appDelegate.navController pushViewController:ctrl animated:YES];
+#else
 	[ctrl setContentSizeForViewInPopover:voicePackViewSize_];
 	[navController_ pushViewController:ctrl animated:YES];
+#endif
 	[ctrl setVoiceIndex:[row intValue]];
 	[ctrl release];
 }
@@ -358,13 +364,9 @@
 - (IBAction)onFemaleTouchUpInside:(id)sender {
 	BookInfo *bookInfo = [[self getModels].bookCollection getAtIndex:flowIndex_];
 #ifdef IPHONE
-//	VoicePackSelectController *ctrl = [[VoicePackSelectController alloc] initWithNibNameAndValue:@"VoicePackSelectView" bundle:nil];
 	[voicePackSelectController_ reload:bookInfo.bookID];
-//	[ctrl reload:bookInfo.bookID];
-	
 	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
 	[appDelegate.navController pushViewController:voicePackSelectController_ animated:YES];
-//	[ctrl release];
 #else
 	if (popoverController_.popoverVisible) {
 		[popoverController_ dismissPopoverAnimated:YES];
@@ -429,7 +431,9 @@
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
 	if ([viewController isKindOfClass:[VoicePackSelectController class]]) {
+#ifndef IPHONE
 		[viewController setContentSizeForViewInPopover:voicePackViewSize_];
+#endif
 	}
 	else if (readViewController_ && readViewController_ != viewController) {
 		[readViewController_ close];
