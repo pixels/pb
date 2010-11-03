@@ -14,6 +14,10 @@
 
 #define VOICE_PACK_DEFAULT_NAME @"新しいボイスパック"
 
+@interface VoicePackSelectController (InternalMethods)
+- (void)onAddTouchUpInside:(id)sender;
+@end
+
 @implementation VoicePackSelectController
 
 #pragma mark -
@@ -21,7 +25,7 @@
 
 - (id)initWithNibNameAndValue:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-		[self setupAddButton:YES];
+//		[self setupAddButton:YES];
     }
     return self;
 }
@@ -59,34 +63,56 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	if (section == 0) {
+		return 1;
+	}
     return [[self getModels].voicePackCollection count];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	if (section == 0) {
+		return @"";
+	}
+	return @"ボイスリスト";
+}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"VoicePackSelectCell";
-    
-    VoicePackSelectCell *cell = (VoicePackSelectCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-		NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellIdentifier owner:self options:nil];
-		cell = [nib objectAtIndex:0];
+	
+	UITableViewCell *cell;
+	if ([indexPath section] == 0) {
+		cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+		if (cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"] autorelease];
+			[cell.textLabel setTextAlignment:UITextAlignmentCenter];
+			[cell.textLabel setText:@"ボイスパックの追加"];
+		}
+	}
+	else {
+		static NSString *CellIdentifier = @"VoicePackSelectCell";
+		
+		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+		if (cell == nil) {
+			NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellIdentifier owner:self options:nil];
+			cell = [nib objectAtIndex:0];
+		}
+		[cell setSelected:NO animated:NO];
+		
+		VoicePackInfo *voicePackInfo = [[self getModels].voicePackCollection getAtIndex:[indexPath row]];
+		
+		// Configure the cell...
+		VoicePackSelectCell *vpscell = (VoicePackSelectCell *)cell;
+		[vpscell.imageView setImage:[(GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate] getIconFromIndex:voicePackInfo.voicePackIndex]];
+		[vpscell.title setText:voicePackInfo.voicePackName];
+		[vpscell.date setText:[voicePackInfo.date description]];
 	}
 	
-	VoicePackInfo *voicePackInfo = [[self getModels].voicePackCollection getAtIndex:[indexPath row]];
-	
-    // Configure the cell...
-    [cell.imageView setImage:[(GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate] getIconFromIndex:voicePackInfo.voicePackIndex]];
-	[cell.title setText:voicePackInfo.voicePackName];
-	[cell.date setText:[voicePackInfo.date description]];
-	
-    return cell;
+	return cell;
 }
 
 // Override to support editing the table view.
@@ -101,7 +127,7 @@
 		[[self getModels].voicePackCollection removeAtIndex:[indexPath row]];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"EDIT_VOICE_PACK_LIST_EVENT" object:nil userInfo:nil];
-		[self setupAddButton:YES];
+//		[self setupAddButton:YES];
     }
 }
 
@@ -116,11 +142,17 @@
     }
 }
 
-//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-//    return YES;
-//}
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+	if ([indexPath section] == 0) {
+		return NO;
+	}
+    return YES;
+}
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+	if ([indexPath section] == 0) {
+		return NO;
+	}
     return YES;
 }
 
@@ -129,19 +161,33 @@
 #pragma mark Table view delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if ([indexPath section] == 0) {
+		return 44;
+	}
+	
+#ifdef IPHONE
+	return 64;
+#else
 	return 80;
+#endif
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-	if (editing_) {
-		NSNumber *row = [NSNumber numberWithUnsignedInt:[indexPath row]];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"PUSH_EDIT_VOICE_PACK_EVENT" object:row userInfo:nil];
+	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+	if ([indexPath section] == 0) {
+		[cell setSelected:NO animated:NO];
+		[self onAddTouchUpInside:nil];
 	}
 	else {
-		NSNumber *row = [NSNumber numberWithUnsignedInt:[indexPath row]];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"SELECT_VOICE_OF_LIST_EVENT" object:row userInfo:nil];
+		if (editing_) {
+			NSNumber *row = [NSNumber numberWithUnsignedInt:[indexPath row]];
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"PUSH_EDIT_VOICE_PACK_EVENT" object:row userInfo:nil];
+		}
+		else {
+			NSNumber *row = [NSNumber numberWithUnsignedInt:[indexPath row]];
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"SELECT_VOICE_OF_LIST_EVENT" object:row userInfo:nil];
+		}
 	}
 }
 
@@ -153,49 +199,6 @@
 	selectedBookID_ = [bookID retain];
 	UITableView *tv = (UITableView *)self.view;
 	[tv reloadData];
-}
-
-- (void)setupAddButton:(BOOL)visible {
-	BOOL reqRelease = NO;
-	
-    if (visible) {
-		if ([[self getModels].voicePackCollection count] < MAX_VOICE_PACK) {
-			if ( !addButton_) {
-#ifdef IPHONE
-				UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 480, 32)];
-				[v setBackgroundColor:[UIColor whiteColor]];
-				[self.navigationItem setTitleView:v];
-				UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-				[btn addTarget:self action:@selector(onAddTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-				[btn.imageView setContentMode:UIViewContentModeScaleAspectFit];
-				[btn setShowsTouchWhenHighlighted:YES];
-				[btn setFrame:CGRectMake(0, 0, 24, 24)];
-				[btn setTitle:nil forState:UIControlStateNormal];
-				[v addSubview:btn];
-				addButton_ = [[UIBarButtonItem alloc] initWithCustomView:v];
-				[self.navigationItem setRightBarButtonItem:addButton_ animated:YES];
-				[v release];
-#else
-				addButton_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-																		   target:self
-																		   action:@selector(onAddTouchUpInside:)];
-				[self.navigationItem setLeftBarButtonItem:addButton_ animated:YES];
-#endif
-			}
-		}
-		else {
-			reqRelease = YES;
-		}
-    }
-	else {
-		reqRelease = YES;
-    }
-	
-	if (reqRelease && addButton_) {
-		[addButton_ release];
-		addButton_ = nil;
-		[self.navigationItem setLeftBarButtonItem:nil animated:YES];
-	}
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
@@ -216,7 +219,7 @@
 		NSDate *date = [NSDate date];
 		NSUInteger randSuffix = rand() % 1000;
 		NSString *addID = [[NSString alloc] initWithFormat:@"VOICEPACK_%@_%d", [date description], randSuffix];
-		NSIndexPath *indexPath = [NSIndexPath indexPathForRow:count inSection:0];
+		NSIndexPath *indexPath = [NSIndexPath indexPathForRow:count inSection:1];
 		NSArray *indexPaths = [NSArray arrayWithObjects:indexPath,nil];
 		NSUInteger randIndex = rand() % 10;
 		
@@ -229,7 +232,7 @@
 	}
 	else {
 		NSLog(@"Voice pack is max!!!");
-		[self setupAddButton:NO];
+//		[self setupAddButton:NO];
 	}
 }
 

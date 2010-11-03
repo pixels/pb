@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A20203B1282106C00C04C27 /* VoicePackSelectView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A20203A1282106C00C04C27 /* VoicePackSelectView.xib */; };
+		0A20204E1282113700C04C27 /* VoicePackSelectCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A20204D1282113700C04C27 /* VoicePackSelectCell.xib */; };
 		0A415BD912651EC300DB9C04 /* media-volume-0-inv2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A415BD812651EC300DB9C04 /* media-volume-0-inv2.png */; };
 		0A57524B12498DC800EE7218 /* Crystal_Clear_action_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A57521312498DC800EE7218 /* Crystal_Clear_action_back.png */; };
 		0A57524C12498DC800EE7218 /* Crystal_Clear_action_configure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A57521412498DC800EE7218 /* Crystal_Clear_action_configure.png */; };
@@ -688,8 +690,6 @@
 		70D569451280C91A007AC6E9 /* VoicePackSelectCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70D569401280C91A007AC6E9 /* VoicePackSelectCell.xib */; };
 		70D569461280C91A007AC6E9 /* VoicePackSelectView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70D569411280C91A007AC6E9 /* VoicePackSelectView.xib */; };
 		70D5694F1280C93E007AC6E9 /* VoicePackEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70D5694A1280C93E007AC6E9 /* VoicePackEditView.xib */; };
-		70D569501280C93E007AC6E9 /* VoicePackSelectCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70D5694B1280C93E007AC6E9 /* VoicePackSelectCell.xib */; };
-		70D569511280C93E007AC6E9 /* VoicePackSelectView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70D5694C1280C93E007AC6E9 /* VoicePackSelectView.xib */; };
 		70D5695A1280CE33007AC6E9 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70D569591280CE33007AC6E9 /* MainWindow.xib */; };
 		70D5695E1280D2B3007AC6E9 /* RootView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70D5695D1280D2B3007AC6E9 /* RootView.xib */; };
 		70DE491D12536B280017A8E8 /* media-play-inv2.png in Resources */ = {isa = PBXBuildFile; fileRef = 70DE491B12536B280017A8E8 /* media-play-inv2.png */; };
@@ -726,6 +726,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A20203A1282106C00C04C27 /* VoicePackSelectView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoicePackSelectView.xib; sourceTree = "<group>"; };
+		0A20204D1282113700C04C27 /* VoicePackSelectCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoicePackSelectCell.xib; sourceTree = "<group>"; };
 		0A415BD812651EC300DB9C04 /* media-volume-0-inv2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "media-volume-0-inv2.png"; sourceTree = "<group>"; };
 		0A45D3DA1249FA3900D2CED0 /* UITouchViewTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITouchViewTouch.h; sourceTree = "<group>"; };
 		0A57521312498DC800EE7218 /* Crystal_Clear_action_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Crystal_Clear_action_back.png; sourceTree = "<group>"; };
@@ -1099,8 +1101,6 @@
 		70D569401280C91A007AC6E9 /* VoicePackSelectCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoicePackSelectCell.xib; sourceTree = "<group>"; };
 		70D569411280C91A007AC6E9 /* VoicePackSelectView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoicePackSelectView.xib; sourceTree = "<group>"; };
 		70D5694A1280C93E007AC6E9 /* VoicePackEditView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoicePackEditView.xib; sourceTree = "<group>"; };
-		70D5694B1280C93E007AC6E9 /* VoicePackSelectCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoicePackSelectCell.xib; sourceTree = "<group>"; };
-		70D5694C1280C93E007AC6E9 /* VoicePackSelectView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoicePackSelectView.xib; sourceTree = "<group>"; };
 		70D569591280CE33007AC6E9 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		70D5695D1280D2B3007AC6E9 /* RootView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootView.xib; sourceTree = "<group>"; };
 		70DE491B12536B280017A8E8 /* media-play-inv2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "media-play-inv2.png"; sourceTree = "<group>"; };
@@ -1716,8 +1716,8 @@
 				70D569591280CE33007AC6E9 /* MainWindow.xib */,
 				70D5695D1280D2B3007AC6E9 /* RootView.xib */,
 				70D5694A1280C93E007AC6E9 /* VoicePackEditView.xib */,
-				70D5694B1280C93E007AC6E9 /* VoicePackSelectCell.xib */,
-				70D5694C1280C93E007AC6E9 /* VoicePackSelectView.xib */,
+				0A20203A1282106C00C04C27 /* VoicePackSelectView.xib */,
+				0A20204D1282113700C04C27 /* VoicePackSelectCell.xib */,
 			);
 			path = iPhone;
 			sourceTree = "<group>";
@@ -2457,10 +2457,10 @@
 				70D5687E1280C3C6007AC6E9 /* Zambia.png in Resources */,
 				70D5687F1280C3C6007AC6E9 /* Zimbabwe.png in Resources */,
 				70D5694F1280C93E007AC6E9 /* VoicePackEditView.xib in Resources */,
-				70D569501280C93E007AC6E9 /* VoicePackSelectCell.xib in Resources */,
-				70D569511280C93E007AC6E9 /* VoicePackSelectView.xib in Resources */,
 				70D5695A1280CE33007AC6E9 /* MainWindow.xib in Resources */,
 				70D5695E1280D2B3007AC6E9 /* RootView.xib in Resources */,
+				0A20203B1282106C00C04C27 /* VoicePackSelectView.xib in Resources */,
+				0A20204E1282113700C04C27 /* VoicePackSelectCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

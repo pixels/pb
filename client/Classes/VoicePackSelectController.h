@@ -17,6 +17,5 @@
 
 - (id)initWithNibNameAndValue:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 - (void)reload:(NSString *)bookID;
-- (void)setupAddButton:(BOOL)visible;
 
 @end
