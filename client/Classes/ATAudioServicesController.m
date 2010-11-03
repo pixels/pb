@@ -1,6 +1,6 @@
 //
 //  ATAudioServicesController.m
-//  PictureBooks
+//  GoodPB
 //
 //  Created by Yusuke Kikkawa on 10/09/22.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.

@@ -1,6 +1,6 @@
 //
-//  PictureBooksAppDelegate.m
-//  PictureBooks
+//  GoodPBAppDelegate.m
+//  GoodPB
 //
 //  Created by Yusuke Kikkawa on 10/09/20.
 //  Copyright __MyCompanyName__ 2010. All rights reserved.
@@ -8,9 +8,9 @@
 
 #import "Configure.h"
 #import "Util.h"
-#import "PictureBooksAppDelegate.h"
+#import "GoodPBAppDelegate.h"
 
-@implementation PictureBooksAppDelegate
+@implementation GoodPBAppDelegate
 
 @synthesize window;
 @synthesize navController = navController_;
@@ -22,9 +22,20 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
 	
+#ifdef IPAD
+	NSLog(@"Device type is iPad.");
+#endif
+#ifdef IPHONE
+	NSLog(@"Device type is iPhone.");
+#endif
+	
     // Override point for customization after application launch.
 	models_ = [[Models alloc] init];
 	audioServicesController_ = [[ATAudioServicesController alloc] init];
+	
+	NSString * deviceModel = [[UIDevice currentDevice] model];
+	NSRange searchResult = [deviceModel rangeOfString:@"iPad"];
+	models_.device.iPad = (searchResult.length > 0);
 	
 	[window addSubview:navController_.view];
     [window makeKeyAndVisible];

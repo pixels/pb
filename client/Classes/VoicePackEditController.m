@@ -1,12 +1,12 @@
     //
 //  VoicePackEditController.m
-//  PictureBooks
+//  GoodPB
 //
 //  Created by kikkawa on 10/10/08.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "PictureBooksAppDelegate.h"
+#import "GoodPBAppDelegate.h"
 #import "VoicePackEditController.h"
 
 #define ICON_SIZE 146
@@ -36,7 +36,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	
-	PictureBooksAppDelegate *appDelegate = (PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
 	[appDelegate.models.voicePackCollection updateObjectAtIndexAndKey:textField_.text index:voiceIndex_ key:@"voicePackName"];
 	[appDelegate.models.voicePackCollection updateObjectAtIndexAndKey:[NSNumber numberWithInt:iconIndex_] index:voiceIndex_ key:@"voicePackIndex"];
 }
@@ -62,7 +62,7 @@
 
 	[scrollView_ setContentSize:CGSizeMake((ICON_SIZE + ICON_MARGIN_W) * count, scrollView_.frame.size.height)];
 	
-	PictureBooksAppDelegate *appDelegate = (PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
 	for (i = 0; i < count; i++) {
 		
 		
@@ -83,7 +83,7 @@
 - (void)setVoiceIndex:(NSUInteger)index {
 	voiceIndex_ = index;
 	
-	PictureBooksAppDelegate *appDelegate = (PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
 	VoicePackInfo *voicePackInfo = [appDelegate.models.voicePackCollection getAtIndex:voiceIndex_];
 	[textField_ setText:voicePackInfo.voicePackName];
 	[self selectIconButton:voicePackInfo.voicePackIndex];

@@ -1,6 +1,6 @@
 //
-//  PictureBooksAppDelegate.h
-//  PictureBooks
+//  GoodPBAppDelegate.h
+//  GoodPB
 //
 //  Created by Yusuke Kikkawa on 10/09/20.
 //  Copyright __MyCompanyName__ 2010. All rights reserved.
@@ -11,7 +11,7 @@
 #import "Models.h"
 #import "ATAudioServicesController.h"
 
-@interface PictureBooksAppDelegate : NSObject <UIApplicationDelegate> {
+@interface GoodPBAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
 	Models *models_;
 	UINavigationController *navController_;

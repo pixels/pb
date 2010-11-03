@@ -1,12 +1,12 @@
 //
 //  BookCollection.m
-//  PictureBooks
+//  GoodPB
 //
 //  Created by kikkawa on 10/09/27.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "PictureBooksAppDelegate.h"
+#import "GoodPBAppDelegate.h"
 #import "BookCollection.h"
 #import "BookInfo.h"
 #import "DirectionType.h"
@@ -103,7 +103,7 @@
 
 - (void)setup {
 	
-	PictureBooksAppDelegate *appDelegate = (PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"BookInfo"

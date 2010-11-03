@@ -1,6 +1,6 @@
 //
 //  main.m
-//  PictureBooks
+//  GoodPB
 //
 //  Created by Yusuke Kikkawa on 10/09/20.
 //  Copyright __MyCompanyName__ 2010. All rights reserved.

@@ -6,7 +6,7 @@
 //  Copyright 2010 3di. All rights reserved.
 //
 
-#import "PictureBooksAppDelegate.h"
+#import "GoodPBAppDelegate.h"
 #import "RootController.h"
 #import "ReadViewCtrl.h"
 #import "Util.h"
@@ -72,27 +72,29 @@
 	[self.view insertSubview:flowView_ atIndex:0];
 	
 	// VoicePack
-	voicePackList_ = [[NSMutableArray alloc] init];
-	[self reloadVoicePackButton];
-	
-	CGSize popSize = CGSizeMake(480, 320);
-	voicePackViewSize_ = CGSizeMake(480, 276);
-	
-	voicePackSelectController_ = [[VoicePackSelectController alloc] initWithNibNameAndValue:@"VoicePackSelectView" bundle:nil];
-	UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithTitle:@"編集"
-																style:UIBarStyleDefault
-															   target:voicePackSelectController_
-															   action:@selector(onEditTouchUpInside)];
-	[voicePackSelectController_ setTitle:@"ボイスの選択"];
-	[voicePackSelectController_.navigationItem setRightBarButtonItem:barItem animated:NO];
-	[barItem release];
-	
-	navController_ = [[UINavigationController alloc] initWithRootViewController:voicePackSelectController_];
-	navController_.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-	navController_.delegate = self;
-	
-	popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController_];
-	[popoverController_ setPopoverContentSize:popSize animated:NO];
+	if ([self getModels].device.iPad) {
+		voicePackList_ = [[NSMutableArray alloc] init];
+		[self reloadVoicePackButton];
+		
+		CGSize popSize = CGSizeMake(480, 320);
+		voicePackViewSize_ = CGSizeMake(480, 276);
+		
+		voicePackSelectController_ = [[VoicePackSelectController alloc] initWithNibNameAndValue:@"VoicePackSelectView" bundle:nil];
+		UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithTitle:@"編集"
+																	style:UIBarStyleDefault
+																   target:voicePackSelectController_
+																   action:@selector(onEditTouchUpInside)];
+		[voicePackSelectController_ setTitle:@"ボイスの選択"];
+		[voicePackSelectController_.navigationItem setRightBarButtonItem:barItem animated:NO];
+		[barItem release];
+		
+		navController_ = [[UINavigationController alloc] initWithRootViewController:voicePackSelectController_];
+		navController_.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+		navController_.delegate = self;
+		
+		popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController_];
+		[popoverController_ setPopoverContentSize:popSize animated:NO];
+	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onEditVoicePackList:) name:@"EDIT_VOICE_PACK_LIST_EVENT" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSelectVoiceOfList:) name:@"SELECT_VOICE_OF_LIST_EVENT" object:nil];
@@ -182,7 +184,7 @@
 		}
 		else {
 			voicePackInfp = [vpc getAtIndex:w];
-			[btn setBackgroundImage:[(PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate] getIconFromIndex:voicePackInfp.voicePackIndex] forState:UIControlStateNormal];
+			[btn setBackgroundImage:[(GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate] getIconFromIndex:voicePackInfp.voicePackIndex] forState:UIControlStateNormal];
 		}
 		[btn setAlpha:(w == 0 ? 1 : VOICE_PACK_BUTTON_DISSELECT_ALPHA)];
 		[btn setTag:w];
@@ -266,7 +268,7 @@
 							  mute:mute
 							mother:mother];
 		
-		PictureBooksAppDelegate *appDelegate = (PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate];
+		GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
 		[appDelegate.navController pushViewController:readViewController_ animated:YES];
 	}
 	else {
@@ -288,7 +290,7 @@
 #pragma mark -
 #pragma mark Models methods
 - (Models *)getModels {
-	PictureBooksAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
 	return appDelegate.models;
 }
 
@@ -296,12 +298,12 @@
 #pragma mark Sound Effect methods
 
 - (void)loadSE:(NSString *)soundID soundPath:(NSString *)soundPath {
-	PictureBooksAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
 	[appDelegate.audioServicesController load:soundID soundPath:soundPath];
 }
 
 - (void)playSE:(NSString *)soundID {
-	PictureBooksAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
 	[appDelegate.audioServicesController play:soundID];
 }
 

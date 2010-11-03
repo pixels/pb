@@ -1,6 +1,6 @@
 //
 //  VoicePackInfo.h
-//  PictureBooks
+//  GoodPB
 //
 //  Created by Yusuke Kikkawa on 10/10/01.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.

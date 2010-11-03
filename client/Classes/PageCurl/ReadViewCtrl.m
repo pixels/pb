@@ -6,7 +6,7 @@
 //  Copyright 2010 3di. All rights reserved.
 //
 
-#import "PictureBooksAppDelegate.h"
+#import "GoodPBAppDelegate.h"
 #import "ReadViewCtrl.h"
 #import "WindowModeType.h"
 #import "ReadViewBaseCtrl.h"
@@ -128,12 +128,12 @@ voicePackDirectory:(NSString *)voicePackDirectory
 }
 
 - (void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
-	PictureBooksAppDelegate *appDelegate = (PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
 	[appDelegate.navController setNavigationBarHidden:hidden animated:animated];
 }
 
 - (void)playSE:(NSString *)soundID {
-	PictureBooksAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
 	[appDelegate.audioServicesController play:soundID];
 }
 

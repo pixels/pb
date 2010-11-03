@@ -1,13 +1,13 @@
 //
 //  VoicePackSelectController.m
-//  PictureBooks
+//  GoodPB
 //
 //  Created by Yusuke Kikkawa on 10/10/01.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
 #import "Util.h"
-#import "PictureBooksAppDelegate.h"
+#import "GoodPBAppDelegate.h"
 #import "VoicePackSelectController.h"
 #import "VoicePackSelectCell.h"
 #import "Configure.h"
@@ -51,7 +51,7 @@
 #pragma mark -
 #pragma mark Models methods
 - (Models *)getModels {
-	PictureBooksAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
 	return appDelegate.models;
 }
 
@@ -82,7 +82,7 @@
 	VoicePackInfo *voicePackInfo = [[self getModels].voicePackCollection getAtIndex:[indexPath row]];
 	
     // Configure the cell...
-    [cell.imageView setImage:[(PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate] getIconFromIndex:voicePackInfo.voicePackIndex]];
+    [cell.imageView setImage:[(GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate] getIconFromIndex:voicePackInfo.voicePackIndex]];
 	[cell.title setText:voicePackInfo.voicePackName];
 	[cell.date setText:[voicePackInfo.date description]];
 	

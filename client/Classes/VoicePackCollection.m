@@ -1,13 +1,13 @@
 //
 //  VoicePackCollection.m
-//  PictureBooks
+//  GoodPB
 //
 //  Created by Yusuke Kikkawa on 10/10/01.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
 #import "Util.h"
-#import "PictureBooksAppDelegate.h"
+#import "GoodPBAppDelegate.h"
 #import "VoicePackCollection.h"
 #import "VoicePackInfo.h"
 
@@ -51,7 +51,7 @@
 			   date:(NSDate *)date
 			  owner:(BOOL)owner {
 	
-	PictureBooksAppDelegate *appDelegate = (PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	NSManagedObject *mo = [NSEntityDescription insertNewObjectForEntityForName:[entity_ name] inManagedObjectContext:appDelegate.managedObjectContext];
 	[mo setValue:[NSNumber numberWithInt:[self count]] forKey:@"number"];
@@ -118,7 +118,7 @@
 }
 
 - (BOOL)removeAtIndex:(NSUInteger)index {
-	PictureBooksAppDelegate *appDelegate = (PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
 	NSManagedObject *mo = [sortArray_ objectAtIndex:index];
 	[appDelegate.managedObjectContext deleteObject:mo];
 	
@@ -153,7 +153,7 @@
 
 - (BOOL)dataSetup:(NSString *)bookID {
 	
-	PictureBooksAppDelegate *appDelegate = (PictureBooksAppDelegate *)[[UIApplication sharedApplication] delegate];
+	GoodPBAppDelegate *appDelegate = (GoodPBAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     entity_ = [NSEntityDescription entityForName:@"VoicePackInfo" inManagedObjectContext:appDelegate.managedObjectContext];
