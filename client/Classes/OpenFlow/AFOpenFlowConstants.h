@@ -24,7 +24,14 @@
  */
 
 // For OpenFlow
+#ifdef IPHONE
+#define COVER_SPACING 80
+#define CENTER_COVER_OFFSET 40
+#define SIDE_COVER_ANGLE .90
+#define SIDE_COVER_ZPOSITION -100
+#else
 #define COVER_SPACING 160
 #define CENTER_COVER_OFFSET 80
 #define SIDE_COVER_ANGLE .90
 #define SIDE_COVER_ZPOSITION -200
+#endif

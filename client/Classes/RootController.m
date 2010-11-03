@@ -16,11 +16,20 @@
 
 #define BUNDLE_FILE_NAME @"00000001"
 #define BOOK_FILE_EXTENSION @"png"
+#ifdef IPHONE
+#define MAX_COVER_WIDTH 210
+#define MAX_COVER_HEIGHT 140
+#define VOICE_PACK_BUTTON_SIZE 24
+#define VOICE_PACK_BUTTON_MARGIN 24
+#define VOICE_PACK_BUTTON_OFFSET_Y 36
+#else
 #define MAX_COVER_WIDTH 480
 #define MAX_COVER_HEIGHT 320
-#define VOICE_PACK_BUTTON_COUNT 10
 #define VOICE_PACK_BUTTON_SIZE 48
 #define VOICE_PACK_BUTTON_MARGIN 48
+#define VOICE_PACK_BUTTON_OFFSET_Y 64
+#endif
+#define VOICE_PACK_BUTTON_COUNT 10
 #define VOICE_PACK_BUTTON_DISSELECT_ALPHA 0.5
 #define VOICE_PACK_MUTE_MESSAGE @"音声無し＆自動ページめくり無し（普通の本としてご利用できます）"
 
@@ -63,7 +72,11 @@
 	[self loadSE:@"select" soundPath:[Util getBandleFile:@"se_menu_select" type:@"wav"]];
 	[self loadSE:@"page_change" soundPath:[Util getBandleFile:@"se_page_change" type:@"wav"]];
 	
+#ifdef IPHONE
+	flowView_ = [[AFOpenFlowView alloc] initWithFrame:CGRectMake(0, 0, 480, 300)];
+#else
 	flowView_ = [[AFOpenFlowView alloc] initWithFrame:CGRectMake(0, 0, 1024, 748)];
+#endif
 	flowView_.dataSource = self;
 	flowView_.viewDelegate = self;
 	flowView_.backgroundColor = [UIColor blackColor];
@@ -72,29 +85,29 @@
 	[self.view insertSubview:flowView_ atIndex:0];
 	
 	// VoicePack
-	if ([self getModels].device.iPad) {
-		voicePackList_ = [[NSMutableArray alloc] init];
-		[self reloadVoicePackButton];
-		
-		CGSize popSize = CGSizeMake(480, 320);
-		voicePackViewSize_ = CGSizeMake(480, 276);
-		
-		voicePackSelectController_ = [[VoicePackSelectController alloc] initWithNibNameAndValue:@"VoicePackSelectView" bundle:nil];
-		UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithTitle:@"編集"
-																	style:UIBarStyleDefault
-																   target:voicePackSelectController_
-																   action:@selector(onEditTouchUpInside)];
-		[voicePackSelectController_ setTitle:@"ボイスの選択"];
-		[voicePackSelectController_.navigationItem setRightBarButtonItem:barItem animated:NO];
-		[barItem release];
-		
-		navController_ = [[UINavigationController alloc] initWithRootViewController:voicePackSelectController_];
-		navController_.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-		navController_.delegate = self;
-		
-		popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController_];
-		[popoverController_ setPopoverContentSize:popSize animated:NO];
-	}
+	voicePackList_ = [[NSMutableArray alloc] init];
+	[self reloadVoicePackButton];
+	
+#ifndef IPHONE
+	CGSize popSize = CGSizeMake(480, 320);
+	voicePackViewSize_ = CGSizeMake(480, 276);
+	
+	voicePackSelectController_ = [[VoicePackSelectController alloc] initWithNibNameAndValue:@"VoicePackSelectView" bundle:nil];
+	UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithTitle:@"編集"
+																style:UIBarStyleDefault
+															   target:voicePackSelectController_
+															   action:@selector(onEditTouchUpInside)];
+	[voicePackSelectController_ setTitle:@"ボイスの選択"];
+	[voicePackSelectController_.navigationItem setRightBarButtonItem:barItem animated:NO];
+	[barItem release];
+	
+	navController_ = [[UINavigationController alloc] initWithRootViewController:voicePackSelectController_];
+	navController_.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+	navController_.delegate = self;
+	
+	popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController_];
+	[popoverController_ setPopoverContentSize:popSize animated:NO];
+#endif
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onEditVoicePackList:) name:@"EDIT_VOICE_PACK_LIST_EVENT" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSelectVoiceOfList:) name:@"SELECT_VOICE_OF_LIST_EVENT" object:nil];
@@ -173,7 +186,7 @@
 	NSInteger max_and_muto_count = voicePackCount + 1;
 	for (w = 0; w < max_and_muto_count; w++) {
 		x = (VOICE_PACK_BUTTON_SIZE + VOICE_PACK_BUTTON_MARGIN) * w + offX;
-		y = 64;
+		y = VOICE_PACK_BUTTON_OFFSET_Y;
 		btn = [UIButton buttonWithType:UIButtonTypeCustom];
 		[btn.imageView setContentMode:UIViewContentModeScaleAspectFit];
 		[btn setShowsTouchWhenHighlighted:YES];

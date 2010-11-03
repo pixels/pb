@@ -11,10 +11,17 @@
 #define PAGING_BY_TAP true
 
 // Page size
+#ifdef IPHONE
+#define WINDOW_AW 320
+#define WINDOW_AH 480
+#define WINDOW_BW 480
+#define WINDOW_BH 320
+#else
 #define WINDOW_AW 768
 #define WINDOW_AH 1024
 #define WINDOW_BW 1024
 #define WINDOW_BH 768
+#endif
 
 // Page Margin
 #define PAGE_MARGIN_TOP 0
