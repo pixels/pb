@@ -10,6 +10,10 @@
 		0A20203B1282106C00C04C27 /* VoicePackSelectView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A20203A1282106C00C04C27 /* VoicePackSelectView.xib */; };
 		0A20204E1282113700C04C27 /* VoicePackSelectCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A20204D1282113700C04C27 /* VoicePackSelectCell.xib */; };
 		0A2020F612821AEB00C04C27 /* VoicePackEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2020F512821AEB00C04C27 /* VoicePackEditView.xib */; };
+		0A20214D1282251B00C04C27 /* ReadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A20214B1282251B00C04C27 /* ReadView.xib */; };
+		0A20214E1282251B00C04C27 /* ReadViewA.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A20214C1282251B00C04C27 /* ReadViewA.xib */; };
+		0A2021561282257500C04C27 /* ReadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2021551282257500C04C27 /* ReadView.xib */; };
+		0A2021581282259800C04C27 /* ReadViewA.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2021571282259800C04C27 /* ReadViewA.xib */; };
 		0A415BD912651EC300DB9C04 /* media-volume-0-inv2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A415BD812651EC300DB9C04 /* media-volume-0-inv2.png */; };
 		0A57524B12498DC800EE7218 /* Crystal_Clear_action_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A57521312498DC800EE7218 /* Crystal_Clear_action_back.png */; };
 		0A57524C12498DC800EE7218 /* Crystal_Clear_action_configure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A57521412498DC800EE7218 /* Crystal_Clear_action_configure.png */; };
@@ -69,8 +73,6 @@
 		7066FB51124703390073EB4A /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7066FB46124703390073EB4A /* ZipArchive.mm */; };
 		7066FB53124703750073EB4A /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7066FB52124703750073EB4A /* libz.1.2.3.dylib */; };
 		7066FB8D12470B9D0073EB4A /* RootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7066FB8C12470B9D0073EB4A /* RootController.m */; };
-		7066FBA61247164B0073EB4A /* ReadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7066FBA41247164B0073EB4A /* ReadView.xib */; };
-		7066FBA71247164B0073EB4A /* ReadViewA.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7066FBA51247164B0073EB4A /* ReadViewA.xib */; };
 		7066FBB11247165C0073EB4A /* ReadViewACtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7066FBAA1247165C0073EB4A /* ReadViewACtrl.m */; };
 		7066FBB21247165C0073EB4A /* ReadViewBaseCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7066FBAC1247165C0073EB4A /* ReadViewBaseCtrl.m */; };
 		7066FBB41247165C0073EB4A /* ReadViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7066FBB01247165C0073EB4A /* ReadViewCtrl.m */; };
@@ -332,8 +334,6 @@
 		70C695E3125503AB006B66BB /* VoicePackInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C695E2125503AB006B66BB /* VoicePackInfo.m */; };
 		70C695E6125503D2006B66BB /* VoicePackCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 70C695E5125503D2006B66BB /* VoicePackCollection.m */; };
 		70D567321280BFEE007AC6E9 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 70D567311280BFEE007AC6E9 /* Device.m */; };
-		70D5676B1280C3C6007AC6E9 /* ReadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7066FBA41247164B0073EB4A /* ReadView.xib */; };
-		70D5676C1280C3C6007AC6E9 /* ReadViewA.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7066FBA51247164B0073EB4A /* ReadViewA.xib */; };
 		70D5676D1280C3C6007AC6E9 /* Crystal_Clear_action_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A57521312498DC800EE7218 /* Crystal_Clear_action_back.png */; };
 		70D5676E1280C3C6007AC6E9 /* Crystal_Clear_action_configure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A57521412498DC800EE7218 /* Crystal_Clear_action_configure.png */; };
 		70D5676F1280C3C6007AC6E9 /* Crystal_Clear_action_forward.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A57521512498DC800EE7218 /* Crystal_Clear_action_forward.png */; };
@@ -729,6 +729,10 @@
 		0A20203A1282106C00C04C27 /* VoicePackSelectView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoicePackSelectView.xib; sourceTree = "<group>"; };
 		0A20204D1282113700C04C27 /* VoicePackSelectCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoicePackSelectCell.xib; sourceTree = "<group>"; };
 		0A2020F512821AEB00C04C27 /* VoicePackEditView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoicePackEditView.xib; sourceTree = "<group>"; };
+		0A20214B1282251B00C04C27 /* ReadView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReadView.xib; sourceTree = "<group>"; };
+		0A20214C1282251B00C04C27 /* ReadViewA.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReadViewA.xib; sourceTree = "<group>"; };
+		0A2021551282257500C04C27 /* ReadView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReadView.xib; sourceTree = "<group>"; };
+		0A2021571282259800C04C27 /* ReadViewA.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReadViewA.xib; sourceTree = "<group>"; };
 		0A415BD812651EC300DB9C04 /* media-volume-0-inv2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "media-volume-0-inv2.png"; sourceTree = "<group>"; };
 		0A45D3DA1249FA3900D2CED0 /* UITouchViewTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITouchViewTouch.h; sourceTree = "<group>"; };
 		0A57521312498DC800EE7218 /* Crystal_Clear_action_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Crystal_Clear_action_back.png; sourceTree = "<group>"; };
@@ -811,8 +815,6 @@
 		7066FB52124703750073EB4A /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = usr/lib/libz.1.2.3.dylib; sourceTree = SDKROOT; };
 		7066FB8B12470B9D0073EB4A /* RootController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootController.h; sourceTree = "<group>"; };
 		7066FB8C12470B9D0073EB4A /* RootController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootController.m; sourceTree = "<group>"; };
-		7066FBA41247164B0073EB4A /* ReadView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReadView.xib; sourceTree = "<group>"; };
-		7066FBA51247164B0073EB4A /* ReadViewA.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReadViewA.xib; sourceTree = "<group>"; };
 		7066FBA91247165C0073EB4A /* ReadViewACtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadViewACtrl.h; sourceTree = "<group>"; };
 		7066FBAA1247165C0073EB4A /* ReadViewACtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadViewACtrl.m; sourceTree = "<group>"; };
 		7066FBAB1247165C0073EB4A /* ReadViewBaseCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadViewBaseCtrl.h; sourceTree = "<group>"; };
@@ -1196,6 +1198,24 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		0A20214A1282251B00C04C27 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				0A20214B1282251B00C04C27 /* ReadView.xib */,
+				0A20214C1282251B00C04C27 /* ReadViewA.xib */,
+			);
+			path = iPad;
+			sourceTree = "<group>";
+		};
+		0A20214F1282252600C04C27 /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				0A2021551282257500C04C27 /* ReadView.xib */,
+				0A2021571282259800C04C27 /* ReadViewA.xib */,
+			);
+			path = iPhone;
+			sourceTree = "<group>";
+		};
 		0A57521112498DC800EE7218 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -1406,8 +1426,8 @@
 		7066FBA31247164B0073EB4A /* PageCurl */ = {
 			isa = PBXGroup;
 			children = (
-				7066FBA41247164B0073EB4A /* ReadView.xib */,
-				7066FBA51247164B0073EB4A /* ReadViewA.xib */,
+				0A20214F1282252600C04C27 /* iPhone */,
+				0A20214A1282251B00C04C27 /* iPad */,
 			);
 			path = PageCurl;
 			sourceTree = "<group>";
@@ -2036,8 +2056,6 @@
 				70C694641254FD59006B66BB /* Portugal.png in Resources */,
 				70C694651254FD59006B66BB /* Puerto-Rico.png in Resources */,
 				70C694661254FD59006B66BB /* Qatar.png in Resources */,
-				7066FBA61247164B0073EB4A /* ReadView.xib in Resources */,
-				7066FBA71247164B0073EB4A /* ReadViewA.xib in Resources */,
 				70C694671254FD59006B66BB /* Red-Cross.png in Resources */,
 				70C694681254FD59006B66BB /* Republic-of-the-Congo.png in Resources */,
 				70C694691254FD59006B66BB /* Romania.png in Resources */,
@@ -2139,6 +2157,8 @@
 				70D569441280C91A007AC6E9 /* VoicePackEditView.xib in Resources */,
 				70D569451280C91A007AC6E9 /* VoicePackSelectCell.xib in Resources */,
 				70D569461280C91A007AC6E9 /* VoicePackSelectView.xib in Resources */,
+				0A20214D1282251B00C04C27 /* ReadView.xib in Resources */,
+				0A20214E1282251B00C04C27 /* ReadViewA.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2358,8 +2378,6 @@
 				70D5683A1280C3C6007AC6E9 /* Portugal.png in Resources */,
 				70D5683B1280C3C6007AC6E9 /* Puerto-Rico.png in Resources */,
 				70D5683C1280C3C6007AC6E9 /* Qatar.png in Resources */,
-				70D5676B1280C3C6007AC6E9 /* ReadView.xib in Resources */,
-				70D5676C1280C3C6007AC6E9 /* ReadViewA.xib in Resources */,
 				70D5683D1280C3C6007AC6E9 /* Red-Cross.png in Resources */,
 				70D5683E1280C3C6007AC6E9 /* Republic-of-the-Congo.png in Resources */,
 				70D5683F1280C3C6007AC6E9 /* Romania.png in Resources */,
@@ -2461,6 +2479,8 @@
 				0A20203B1282106C00C04C27 /* VoicePackSelectView.xib in Resources */,
 				0A20204E1282113700C04C27 /* VoicePackSelectCell.xib in Resources */,
 				0A2020F612821AEB00C04C27 /* VoicePackEditView.xib in Resources */,
+				0A2021561282257500C04C27 /* ReadView.xib in Resources */,
+				0A2021581282259800C04C27 /* ReadViewA.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
