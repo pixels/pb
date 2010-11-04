@@ -116,7 +116,7 @@ voicePackDirectory:(NSString *)voicePackDirectory
 	}
 	
 	if (soundCtrl_.status == StatusModePlaying) {
-		NSLog(@"stopSound");
+//		NSLog(@"stopSound");
 		[soundCtrl_ close];
 	}
 }
@@ -163,7 +163,7 @@ voicePackDirectory:(NSString *)voicePackDirectory
 }
 
 - (void)pageNext {
-	NSLog(@"pageNext");
+//	NSLog(@"pageNext");
 
 	[self playSE:@"page_change"];
 	
@@ -175,7 +175,7 @@ voicePackDirectory:(NSString *)voicePackDirectory
 }
 
 - (void)pagePrev {
-	NSLog(@"pagePrev");
+//	NSLog(@"pagePrev");
 	
 	[self playSE:@"page_change"];
 	
@@ -268,7 +268,9 @@ voicePackDirectory:(NSString *)voicePackDirectory
 }
 
 - (void)onBeginCurlStart:(NSNotification *)notification {
-	NSLog(@"onBeginCurlStart Maybe, Stop automatic curl timer and voice here. Check next sound is called");
+//	NSLog(@"onBeginCurlStart Maybe, Stop automatic curl timer and voice here. Check next sound is called");
+	[self stopSound];
+	[ReadViewCtrl cancelPreviousPerformRequestsWithTarget:self];
 }
 
 - (void)onNavigationBarTimer:(NSTimer*)timer {
@@ -285,7 +287,7 @@ voicePackDirectory:(NSString *)voicePackDirectory
 }
 
 - (void)onTrackFinishedPlaying:(NSNotification *)notification {
-	NSLog(@"onTrackFinishedPlaying SOUND FINISHED");
+//	NSLog(@"onTrackFinishedPlaying SOUND FINISHED");
 	
 	if (mother_) {
 		[self stopSound];
