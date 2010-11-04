@@ -43,40 +43,40 @@
 	[_bookView setUserInteractionEnabled:NO];
 	// [_scrollView setBackgroundColor:[UIColor blueColor]];
 	[_scrollView addSubview:_bookView];
-  [_bookView release];
+	[_bookView release];
 	
 	bottomLayer = [[CALayer alloc] init];
 	bottomLayer.masksToBounds = YES;
 	[_bookView.layer addSublayer:bottomLayer];
-  [bottomLayer release];
+	[bottomLayer release];
 	
 	centerPageLine = [[CAGradientLayer alloc] init];
 	centerPageLine.backgroundColor = [[UIColor whiteColor] CGColor];
 	[bottomLayer addSublayer:centerPageLine];
-  [centerPageLine release];
+	[centerPageLine release];
 	
 	rightPageLayer = [[CALayer alloc] init];
 	[bottomLayer addSublayer:rightPageLayer];
 	rightPageLayer.masksToBounds = YES;
 	rightPageImageLayer = [[CALayer alloc] init];
 	[rightPageLayer addSublayer:rightPageImageLayer];
-  [rightPageImageLayer release];
-  [rightPageLayer release];
+	[rightPageImageLayer release];
+	[rightPageLayer release];
 	
 	leftPageLayer = [[CALayer alloc] init];
 	[bottomLayer addSublayer:leftPageLayer];
 	leftPageLayer.masksToBounds = YES;
 	leftPageImageLayer = [[CALayer alloc] init];
 	[leftPageLayer addSublayer:leftPageImageLayer];
-  [leftPageImageLayer release];
-  [leftPageLayer release];
+	[leftPageImageLayer release];
+	[leftPageLayer release];
 	
 	centerPageRightShadow = [[CAGradientLayer alloc] init];
 	[bottomLayer addSublayer:centerPageRightShadow];
 	centerPageLeftShadow = [[CAGradientLayer alloc] init];
 	[bottomLayer addSublayer:centerPageLeftShadow];
-  [centerPageLeftShadow release];
-  [centerPageRightShadow release];
+	[centerPageLeftShadow release];
+	[centerPageRightShadow release];
 	
 	middleLayer = [[CALayer alloc] init];
 	middleLayer.masksToBounds = YES;
@@ -88,16 +88,16 @@
 	middlePageImageLayer = [[CALayer alloc] init];
 	middlePageImageLayer.masksToBounds = YES;
 	[middlePageLayer addSublayer:middlePageImageLayer];
-  [middleLayer release];
-  [middlePageLayer release];
-  [middlePageImageLayer release];
+	[middleLayer release];
+	[middlePageLayer release];
+	[middlePageImageLayer release];
 	
 	middlePageLeftShadowLayer = [[CAGradientLayer alloc] init];
 	[middlePageLayer addSublayer:middlePageLeftShadowLayer];
 	middlePageRightShadowLayer = [[CAGradientLayer alloc] init];
 	[middlePageLayer addSublayer:middlePageRightShadowLayer];
-  [middlePageLeftShadowLayer release];
-  [middlePageRightShadowLayer release];
+	[middlePageLeftShadowLayer release];
+	[middlePageRightShadowLayer release];
 	
 	topLayer = [[CALayer alloc] init];
 	topLayer.masksToBounds = YES;
@@ -110,15 +110,15 @@
 	topPageImageLayer.masksToBounds = YES;
 	topPageImageLayer.backgroundColor = [[UIColor whiteColor] CGColor];
 	[topPageLayer addSublayer:topPageImageLayer];
-  [topPageLayer release];
-  [topPageImageLayer release];
-  [topLayer release];
+	[topPageLayer release];
+	[topPageImageLayer release];
+	[topLayer release];
 	
 	topPageOverlayLayer = [[CALayer alloc] init];
 	topPageOverlayLayer.masksToBounds = YES;
 	topPageOverlayLayer.backgroundColor = [[UIColor whiteColor] CGColor];
 	[topPageImageLayer addSublayer:topPageOverlayLayer];
-  [topPageOverlayLayer release];
+	[topPageOverlayLayer release];
 	
 	topPageLeftOutShadowLayer = [[CAGradientLayer alloc] init];
 	[topLayer addSublayer:topPageLeftOutShadowLayer];
@@ -126,30 +126,30 @@
 	[topLayer addSublayer:topPageCurlShadowLayer];
 	topPageRightOutShadowLayer = [[CAGradientLayer alloc] init];
 	[topLayer addSublayer:topPageRightOutShadowLayer];
-  [topPageLeftOutShadowLayer release];
-  [topPageCurlShadowLayer release];
-  [topPageRightOutShadowLayer release];
+	[topPageLeftOutShadowLayer release];
+	[topPageCurlShadowLayer release];
+	[topPageRightOutShadowLayer release];
 	
 	topPageLeftShadowLayer = [[CAGradientLayer alloc] init];
 	[topPageImageLayer addSublayer:topPageLeftShadowLayer];
 	topPageRightShadowLayer = [[CAGradientLayer alloc] init];
 	[topPageImageLayer addSublayer:topPageRightShadowLayer];
-  [topPageLeftShadowLayer release];
-  [topPageRightShadowLayer release];
-
+	[topPageLeftShadowLayer release];
+	[topPageRightShadowLayer release];
+	
 	
 	_leftView = [[UIView alloc] init];
 	[_leftView setUserInteractionEnabled:NO];
 	//[_scrollView addSubview:_leftView];
-  [_leftView release];
+	[_leftView release];
 	
 	_rightView = [[UIView alloc] init];
 	[_rightView setUserInteractionEnabled:NO];
 	//[_scrollView addSubview:_rightView];
-  [_rightView release];
+	[_rightView release];
 	
 	[self.view addSubview:_scrollView];
-  [_scrollView release];
+	[_scrollView release];
 	
 	_pageCurlView = [[UIView alloc] initWithFrame:self.view.frame];
 	//[_pageCurlView setBackgroundColor:[UIColor blueColor]];
@@ -639,7 +639,7 @@
 	topPageRightOutShadowLayer.opacity = MAX((1.0f - 4 * (ratio - 0.5)*(ratio - 0.5)), 0);
 	topPageCurlShadowLayer.opacity = MAX((1.0f - 4 * (ratio - 0.5)*(ratio - 0.5)), 0);
 	topPageLeftOutShadowLayer.opacity = MAX((1.0f - 4 * (ratio - 0.5)*(ratio - 0.5)), 0);
-
+	
 	if ( curling == left ) {
 		middlePageLayer.frame = CGRectMake(center - image_width + image_width * ratio, 0, image_width * (1.0f - ratio) , image_height);
 		middlePageImageLayer.frame = CGRectMake(-1.0f * image_width * ratio + image_margin_x, image_margin_y, middlePageImageLayer.frame.size.width , middlePageImageLayer.frame.size.height);
@@ -872,39 +872,39 @@
 }
 
 - (void) nextWithAnimation {
-  if ( _direction == DIRECTION_LEFT ) {
-    _curl_side = left;
-    _curl_from = left;
-  } else {
-    _curl_side = right;
-    _curl_from = right;
-  }
-  _curl_to = [self getAnotherSide:_curl_from];
-  [self startFor:_curl_side from:_curl_from];
-  _curl_ratio = 0.0f;
-  _mode = page_mode_animation;
-  [self notifyGoToNextPage];
-  [self performSelector:@selector(autoCurlAnimation)
-				 withObject:nil 
-				 afterDelay:PAGING_WAIT_TIME];
+	if ( _direction == DIRECTION_LEFT ) {
+		_curl_side = left;
+		_curl_from = left;
+	} else {
+		_curl_side = right;
+		_curl_from = right;
+	}
+	_curl_to = [self getAnotherSide:_curl_from];
+	[self startFor:_curl_side from:_curl_from];
+	_curl_ratio = 0.0f;
+	_mode = page_mode_animation;
+	[self notifyGoToNextPage];
+	[self performSelector:@selector(autoCurlAnimation)
+			   withObject:nil 
+			   afterDelay:PAGING_WAIT_TIME];
 }
 
 - (void) prevWithAnimation {
-  if ( _direction != DIRECTION_LEFT ) {
-    _curl_side = left;
-    _curl_from = left;
-  } else {
-    _curl_side = right;
-    _curl_from = right;
-  }
-  _curl_to = [self getAnotherSide:_curl_from];
-  [self startFor:_curl_side from:_curl_from];
-  _curl_ratio = 0.0f;
-  _mode = page_mode_animation;
-  [self notifyGoToPrevPage];
-  [self performSelector:@selector(autoCurlAnimation)
-				 withObject:nil 
-				 afterDelay:PAGING_WAIT_TIME];
+	if ( _direction != DIRECTION_LEFT ) {
+		_curl_side = left;
+		_curl_from = left;
+	} else {
+		_curl_side = right;
+		_curl_from = right;
+	}
+	_curl_to = [self getAnotherSide:_curl_from];
+	[self startFor:_curl_side from:_curl_from];
+	_curl_ratio = 0.0f;
+	_mode = page_mode_animation;
+	[self notifyGoToPrevPage];
+	[self performSelector:@selector(autoCurlAnimation)
+			   withObject:nil 
+			   afterDelay:PAGING_WAIT_TIME];
 }
 
 
@@ -1040,7 +1040,7 @@
 				[super releaseBook:number removeFromList:YES];
 			}
 			if ([_imageList objectForKey:number]) {
-//				NSLog(@"release image %d", i);
+				//				NSLog(@"release image %d", i);
 				[super releaseImage:number removeFromList:YES];
 			}
 		}
@@ -1080,7 +1080,7 @@
 				[_imageList setObject:(id)[self getImageRefFromUIImage:image] forKey:number];
 				[imageView release];
 			}
-				[image release];
+			[image release];
 			[image_path release];
 		}
 	}
@@ -1340,20 +1340,20 @@
 	if ( _mode == page_mode_animation ) {
 	} else if ( _mode == page_mode_curl_start ) {
 		if ( PAGING_BY_TAP ) {
-//			if ( point.x < self.view.frame.size.width / 2 ) {
-//				if ( _direction == DIRECTION_LEFT ) {
-//					[self notifyGoToNextPage];
-//				} else {
-//					[self notifyGoToPrevPage];
-//				}
-//			} else {
-//				if ( _direction == DIRECTION_LEFT ) {
-//					[self notifyGoToPrevPage];
-//				} else {
-//					[self notifyGoToNextPage];
-//				}
-//			}
-//			[self setPages];
+			//			if ( point.x < self.view.frame.size.width / 2 ) {
+			//				if ( _direction == DIRECTION_LEFT ) {
+			//					[self notifyGoToNextPage];
+			//				} else {
+			//					[self notifyGoToPrevPage];
+			//				}
+			//			} else {
+			//				if ( _direction == DIRECTION_LEFT ) {
+			//					[self notifyGoToPrevPage];
+			//				} else {
+			//					[self notifyGoToNextPage];
+			//				}
+			//			}
+			//			[self setPages];
 			[self notifyTapPage];
 		}
 		_mode = page_mode_none;
