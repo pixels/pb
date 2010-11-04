@@ -18,6 +18,7 @@
 - (NSInteger) getRightPageNumberWithDistance:(NSInteger)d;
 - (NSInteger) getLeftPageNumberWithDistance:(NSInteger)d;
 - (void)notifyTapPage;
+- (void)notifyBeginCurlStart;
 - (void) endFor:(int)curling from:(int)from to:(int)to;
 - (void)setPages;
 - (void)loadPages:(NSInteger)selectPage windowMode:(NSInteger)windowMode;
@@ -1233,6 +1234,7 @@
 				[self startFor:curlSide from:_curl_from];
 			}
 		}
+		[self notifyBeginCurlStart];
 	} else if ( _mode == page_mode_curling ) {
 		if ( _curl_from == right) {
 			if ( delta_x >= 0) {
@@ -1426,6 +1428,10 @@
 
 - (void)notifyTapPage {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"tapPageEvent" object:nil userInfo:nil];
+}
+
+- (void)notifyBeginCurlStart {
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"BEGIN_CURL_START_EVENT" object:nil userInfo:nil];
 }
 
 - (void)notifyGoToNextPage {

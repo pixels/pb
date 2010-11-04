@@ -50,6 +50,7 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTouchImage:) name:IMAGE_TOUCH_EVENT object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTapPage:) name:@"tapPageEvent" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBeginCurlStart:) name:@"BEGIN_CURL_START_EVENT" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGoToNextPage:) name:@"goToNextPageEvent" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGoToPrevPage:) name:@"goToPrevPageEvent" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBookmarkSaveSelect:) name:BOOKMARK_SAVE_EVENT object:nil];
@@ -264,6 +265,10 @@ voicePackDirectory:(NSString *)voicePackDirectory
 										   selector:@selector(onNavigationBarTimer:)
 										   userInfo:nil
 											repeats:NO];
+}
+
+- (void)onBeginCurlStart:(NSNotification *)notification {
+	NSLog(@"onBeginCurlStart Maybe, Stop automatic curl timer and voice here. Check next sound is called");
 }
 
 - (void)onNavigationBarTimer:(NSTimer*)timer {
