@@ -181,6 +181,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 	if ([indexPath section] == 0) {
+		[tableView deselectRowAtIndexPath:indexPath animated:NO];
 		[cell setSelected:NO animated:NO];
 		[self onAddTouchUpInside:nil];
 	}

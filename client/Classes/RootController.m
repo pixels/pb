@@ -435,7 +435,8 @@
 		[viewController setContentSizeForViewInPopover:voicePackViewSize_];
 #endif
 	}
-	else if (readViewController_ && readViewController_ != viewController) {
+	
+	if (readViewController_ && ![viewController isKindOfClass:[ReadViewCtrl class]]) {
 		[readViewController_ close];
 		[readViewController_ release];
 		readViewController_ = nil;
