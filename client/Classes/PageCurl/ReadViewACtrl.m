@@ -13,6 +13,15 @@
 #import "DirectionType.h"
 #import "UIImageViewWithTouch.h"
 
+@interface ReadViewACtrl (InternalMethods)
+- (void)initLayout;
+- (NSInteger) getRightPageNumberWithDistance:(NSInteger)d;
+- (NSInteger) getLeftPageNumberWithDistance:(NSInteger)d;
+- (void)notifyTapPage;
+- (void) endFor:(int)curling from:(int)from to:(int)to;
+- (void)setPages;
+- (void)loadPages:(NSInteger)selectPage windowMode:(NSInteger)windowMode;
+@end
 
 @implementation ReadViewACtrl
 @synthesize scrollView = _scrollView;
@@ -1068,7 +1077,7 @@
 			{
 				UIImageViewWithTouch *imageView = [[UIImageViewWithTouch alloc] initWithImage:image];
 				[_pageList setObject:imageView forKey:number];
-				[_imageList setObject:[self getImageRefFromUIImage:image] forKey:number];
+				[_imageList setObject:(id)[self getImageRefFromUIImage:image] forKey:number];
 				[imageView release];
 			}
 				[image release];
@@ -1186,7 +1195,7 @@
 	float delta_x = point.x - touchStartPoint.x;
 	_curl_ratio = 0.0f;
 	
-	NSInteger _curl_side;
+	NSInteger curlSide;
 	if ( _mode == page_mode_curl_start ) {
 		_mode = page_mode_curling;
 		if ( delta_x >= 0) {
@@ -1194,34 +1203,34 @@
 			
 			if ( _windowMode == MODE_A ) {
 				if ( _direction == DIRECTION_LEFT ) {
-					_curl_side = left;
+					curlSide = left;
 				} else {
-					_curl_side = right;
+					curlSide = right;
 				}
 			} else {
-				_curl_side = left;
+				curlSide = left;
 			}
 			
 			if (((_direction == DIRECTION_LEFT) && [self isNext]) || ((_direction != DIRECTION_LEFT) && [self isPrev])) {
 				[self setPages];
-				[self startFor:_curl_side from:_curl_from];
+				[self startFor:curlSide from:_curl_from];
 			}
 		} else {
 			_curl_from = right;
 			
 			if ( _windowMode == MODE_A ) {
 				if ( _direction == DIRECTION_LEFT ) {
-					_curl_side = left;
+					curlSide = left;
 				} else {
-					_curl_side = right;
+					curlSide = right;
 				}
 			} else {
-				_curl_side = right;
+				curlSide = right;
 			}
 			
 			if (((_direction != DIRECTION_LEFT) && [self isNext]) || ((_direction == DIRECTION_LEFT) && [self isPrev])) {
 				[self setPages];
-				[self startFor:_curl_side from:_curl_from];
+				[self startFor:curlSide from:_curl_from];
 			}
 		}
 	} else if ( _mode == page_mode_curling ) {
@@ -1229,76 +1238,76 @@
 			if ( delta_x >= 0) {
 				if ( _windowMode == MODE_A ) {
 					if ( _direction == DIRECTION_LEFT ) {
-						_curl_side = left;
+						curlSide = left;
 					} else {
-						_curl_side = right;
+						curlSide = right;
 					}
 				} else {
-					_curl_side = left;
+					curlSide = left;
 				}
 				
 				_curl_from = left;
 				[self setPages];
 				if (((_direction == DIRECTION_LEFT) && [self isNext]) || ((_direction != DIRECTION_LEFT) && [self isPrev])) {
-					[self startFor:_curl_side from:_curl_from];
+					[self startFor:curlSide from:_curl_from];
 				}
 			} else {
 				if ( _windowMode == MODE_A ) {
 					if ( _direction == DIRECTION_LEFT ) {
-						_curl_side = left;
+						curlSide = left;
 					} else {
-						_curl_side = right;
+						curlSide = right;
 					}
 					
-					if ( _curl_side  == _curl_from ) {
+					if ( curlSide  == _curl_from ) {
 						_curl_ratio = -1.0f * CURL_BOOST * delta_x / WINDOW_AW;
 					} else {
 						_curl_ratio = 1.0f - ( -1.0f * CURL_BOOST * delta_x / WINDOW_AW);
 					}
 				} else {
-					_curl_side = right;
+					curlSide = right;
 					_curl_ratio = -1.0f * CURL_BOOST * delta_x / WINDOW_BW;
 				}
 				if ( ((_direction != DIRECTION_LEFT) && [self isNext]) || ((_direction == DIRECTION_LEFT) && [self isPrev])) {
-					[self curlFor:_curl_side from:_curl_from ratio:_curl_ratio];
+					[self curlFor:curlSide from:_curl_from ratio:_curl_ratio];
 				}
 			}
 		} else {
 			if ( delta_x < 0) {
 				if ( _windowMode == MODE_A ) {
 					if ( _direction == DIRECTION_LEFT ) {
-						_curl_side = left;
+						curlSide = left;
 					} else {
-						_curl_side = right;
+						curlSide = right;
 					}
 				} else {
-					_curl_side = right;
+					curlSide = right;
 				}
 				
 				_curl_from = right;
 				[self setPages];
 				if ( ((_direction != DIRECTION_LEFT) && [self isNext]) || ((_direction == DIRECTION_LEFT) && [self isPrev])) {
-					[self startFor:_curl_side from:_curl_from];
+					[self startFor:curlSide from:_curl_from];
 				}
 			} else {
 				if ( _windowMode == MODE_A ) {
 					if ( _direction == DIRECTION_LEFT ) {
-						_curl_side = left;
+						curlSide = left;
 					} else {
-						_curl_side = right;
+						curlSide = right;
 					}
 					
-					if ( _curl_side  == _curl_from ) {
+					if ( curlSide  == _curl_from ) {
 						_curl_ratio = delta_x * CURL_BOOST / WINDOW_AW;
 					} else {
 						_curl_ratio = 1.0f - ( delta_x * CURL_BOOST / WINDOW_AW);
 					}
 				} else {
-					_curl_side = left;
+					curlSide = left;
 					_curl_ratio = delta_x * CURL_BOOST / WINDOW_BW;
 				}
 				if (((_direction == DIRECTION_LEFT) && [self isNext]) || ((_direction != DIRECTION_LEFT) && [self isPrev])) {
-					[self curlFor:_curl_side from:_curl_from ratio:_curl_ratio];
+					[self curlFor:curlSide from:_curl_from ratio:_curl_ratio];
 				}
 			}
 		}
@@ -1321,9 +1330,6 @@
 	CGPoint point = [touch locationInView:self.view];
 	
 	float delta_x = point.x - touchStartPoint.x;
-	
-	BOOL page_change_flag = false;
-	
 	/*
      for ( UITouch* touch in touches )
      {
