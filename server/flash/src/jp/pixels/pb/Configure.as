@@ -8,8 +8,8 @@ package jp.pixels.pb
 	public class Configure {
 		public static const DEBUG:Boolean = true;
 		
-		//public static const BASE_URL:String = "http://yuimaar.com/~yusuke/pbweb";
-		public static const BASE_URL:String = "http://pb.yuimaar.com";
+		//public static const BASE_URL:String = "http://pb.yuimaar.com";
+		public static const BASE_URL:String = "http://good-pb.com";
 		public static const API_UPLOAD_URL:String = BASE_URL + "/api/upload.php";
 		public static const API_DELETE_URL:String = BASE_URL + "/api/delete.php";
 		public static const API_REARRANGE_URL:String = BASE_URL + "/api/rearrange.php";
