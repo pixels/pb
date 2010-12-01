@@ -15,10 +15,11 @@ package jp.pixels.pb
 		public static const API_REARRANGE_URL:String = BASE_URL + "/api/rearrange";
 		public static const UPLOAD_URL:String = BASE_URL + "/upload";
 		
-		public static const AREA_W:Number = 1024;
-		public static const AREA_H:Number = 768;
-		public static const PREVIEW_W:Number = 768;
-		public static const PREVIEW_H:Number = 768;
+		public static const BACK_COLOR:uint = 0xEBEACE;
+		public static const AREA_W:Number = 970;
+		public static const AREA_H:Number = 560;
+		public static const PREVIEW_W:Number = 700;
+		public static const PREVIEW_H:Number = 560;
 		public static const PAGE_W:Number = 520 / 2;
 		public static const PAGE_H:Number = 400;
 		public static const CONTROL_W:Number = AREA_W - PREVIEW_W;

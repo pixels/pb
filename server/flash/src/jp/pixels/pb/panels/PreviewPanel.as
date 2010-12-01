@@ -15,7 +15,7 @@ package jp.pixels.pb.panels {
 		
 		private const LAYER_BK:int = 0;
 		private const LAYER_BOOK:int = 1;
-		private const CONTROLLER_OFFSET_Y:Number = 70;
+		private const CONTROLLER_OFFSET_Y:Number = 400;
 
 		private var pageW_:Number = 0;
 		private var pageH_:Number = 0;
@@ -31,7 +31,7 @@ package jp.pixels.pb.panels {
 			pageH_ = pageH;
 			pageCount_ = 0;
 			
-			graphics.beginFill(0);
+			graphics.beginFill(Configure.BACK_COLOR);
 			graphics.drawRect(0, 0, Configure.PREVIEW_W, Configure.PREVIEW_H);
 			graphics.endFill();
 			
@@ -39,18 +39,18 @@ package jp.pixels.pb.panels {
 			//addChildAt(bk, LAYER_BK);
 			
 			back_ = new Sprite();
-			back_.graphics.beginFill(0x000000, 0);
+			back_.graphics.beginFill(0, 0);
 			back_.graphics.drawRect(0, 0, bk.width, bk.height);
 			back_.graphics.endFill();
 			back_.addChild(bk);
 			addChildAt(back_, LAYER_BK);
 			
-			controller_ = new PreviewControlPanel(Configure.PREVIEW_W - 96, 64);
-			controller_.x = Configure.PREVIEW_W / 2 - controller_.width / 2;
-			controller_.y = Configure.PREVIEW_H - controller_.height - CONTROLLER_OFFSET_Y;
+			controller_ = new PreviewControlPanel(Configure.PREVIEW_W - 180, 32);
+			controller_.x = Configure.PREVIEW_W / 2 - controller_.width / 2 - 4;
+			controller_.y = CONTROLLER_OFFSET_Y;
 			controller_.addEventListener(PBEvent.PREVIEW_LEFT, onControllerLeft);
 			controller_.addEventListener(PBEvent.PREVIEW_RIGHT, onControllerRight);
-			addChild(controller_);
+			back_.addChild(controller_);
 		}
 		
 		public function initBookFlip(store:Store, bind:int):void {

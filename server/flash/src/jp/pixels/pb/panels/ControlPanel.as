@@ -21,70 +21,35 @@ package jp.pixels.pb.panels {
 	 */
 	public class ControlPanel extends Sprite {
 		
-		private const ARROW_MARGIN_BOTTOM:Number = 56;
+		private const ARROW_MARGIN_BOTTOM:Number = 128;
 		private const PANEL_Y:Number = 64;
-		private const PANEL_W:Number = 240;
-		private const PANEL_H:Number = 520;
+		private const PANEL_W:Number = 246;
+		private const PANEL_H:Number = 426;
 		
 		private var directory_:String = "pbweb";
 		private var store_:Store;
 		private var upload_:UIButton;
-		private var arrow_:ArrowButton;
 		private var uploadPanel_:UploadPanel;
 		private var catalogPanel_:CatalogPanel;
+		private var pubBtn_:UIButton;
+		private var trashButton_:UIButton;
 		private var previewPanel_:PreviewPanel;
 		private var server_:ServerCommunicator;
+		private var bind_:int = Bookflip.BIND_LEFT;
 		
 		private var debugTF_:TextField;
 		
 		public function ControlPanel() {
 			
-			var previewW:Number = Configure.PREVIEW_W / 2;
-			var previewH:Number = Configure.PREVIEW_H;
-			
 			store_ = new Store(Configure.PAGE_W, Configure.PAGE_H);
 			store_.addEventListener(PBEvent.STORE_LOADED, onStoreLoaded);
 			
-			graphics.beginFill(0x000000);
+			graphics.beginFill(0, 0);
 			graphics.drawRect(0, 0, Configure.CONTROL_W, Configure.CONTROL_H);
 			graphics.endFill();
-			
-			upload_ = new UIButton(128, 32, ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_UPLOAD), "ページを追加");
-			upload_.x = Configure.CONTROL_W / 2 - upload_.width / 2;
-			upload_.y = 16;
-			upload_.addEventListener(MouseEvent.CLICK, onUploadClick);
-			addChild(upload_);
-			
-			arrow_ = new ArrowButton(PANEL_W, 96);
-			arrow_.x = (width / 2) - (arrow_.width / 2);
-			arrow_.y = height - arrow_.height - ARROW_MARGIN_BOTTOM;
-			arrow_.addEventListener(MouseEvent.CLICK, onArrowClick);
-			addChild(arrow_);
-			
-			uploadPanel_ = new UploadPanel(PANEL_W, PANEL_H, 0.5, directory_);
-			uploadPanel_.x = (width / 2) - (uploadPanel_.width / 2);
-			uploadPanel_.y = PANEL_Y;
-			uploadPanel_.addEventListener(PBEvent.UPLOAD_START_OPEN, onUploadStartOpen);
-			uploadPanel_.addEventListener(PBEvent.UPLOAD_COMPLETE_CLOSE, onUploadCompleteClose);
-			addChild(uploadPanel_);
-			
-			catalogPanel_ = new CatalogPanel(PANEL_W, PANEL_H, 0.5);
-			catalogPanel_.x = (width / 2) - (catalogPanel_.width / 2);
-			catalogPanel_.y = PANEL_Y;
-			catalogPanel_.addEventListener(PBEvent.CATALOG_SWAP, onCatalogSwap);
-			catalogPanel_.addEventListener(PBEvent.CATALOG_TRASH, onCatalogTrash);
-			addChild(catalogPanel_);
-			
-			previewPanel_ = new PreviewPanel(previewW, previewH);
-			previewPanel_.x = Configure.CONTROL_W;
-			previewPanel_.y = 0;
-			previewPanel_.addEventListener(PBEvent.PUBLISH_CLICK, onPublishClick);
-			addChild(previewPanel_);
-			
-			var line:Sprite = createLine(2, previewH - 32);
-			line.x = previewPanel_.x + 4;
-			line.y = 0;
-			addChild(line);
+
+			createPreviePanel();
+			createControlPanel();
 			
 			if (Configure.DEBUG) {
 				debugTF_ = createDebug(Configure.AREA_W, 20);
@@ -94,6 +59,56 @@ package jp.pixels.pb.panels {
 			}
 			
 			registExternalInterface();
+		}
+		
+		private function createPreviePanel():void {
+			var previewW:Number = Configure.PREVIEW_W / 2;
+			var previewH:Number = Configure.PREVIEW_H;
+			previewPanel_ = new PreviewPanel(previewW, previewH);
+			previewPanel_.x = 0;
+			previewPanel_.y = 0;
+			addChild(previewPanel_);
+		}
+		
+		private function createControlPanel():void {
+			var ctrlPanel:Sprite = new Sprite();
+			ctrlPanel.graphics.beginFill(Configure.BACK_COLOR);
+			ctrlPanel.graphics.drawRect(0, 0, Configure.CONTROL_W, Configure.CONTROL_H);
+			ctrlPanel.graphics.endFill();
+			ctrlPanel.x = Configure.PREVIEW_W;
+			addChild(ctrlPanel);
+			
+			upload_ = new UIButton(PANEL_W, 46, ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_UPLOAD), "ページを追加");
+			upload_.x = Configure.CONTROL_W - upload_.width;
+			upload_.y = 0;
+			upload_.addEventListener(MouseEvent.CLICK, onUploadClick);
+			ctrlPanel.addChild(upload_);
+			
+			uploadPanel_ = new UploadPanel(PANEL_W, PANEL_H, 0.5, directory_);
+			uploadPanel_.x = Configure.CONTROL_W - uploadPanel_.width;
+			uploadPanel_.y = upload_.y + upload_.height + 6;
+			uploadPanel_.addEventListener(PBEvent.UPLOAD_START_OPEN, onUploadStartOpen);
+			uploadPanel_.addEventListener(PBEvent.UPLOAD_COMPLETE_CLOSE, onUploadCompleteClose);
+			ctrlPanel.addChild(uploadPanel_);
+			
+			catalogPanel_ = new CatalogPanel(PANEL_W, PANEL_H, 0.5);
+			catalogPanel_.x = Configure.CONTROL_W - catalogPanel_.width;
+			catalogPanel_.y = uploadPanel_.y;
+			catalogPanel_.addEventListener(PBEvent.CATALOG_SWAP, onCatalogSwap);
+			catalogPanel_.addEventListener(PBEvent.CATALOG_ARROW, onArrowClick);
+			ctrlPanel.addChild(catalogPanel_);
+			
+			pubBtn_ = new UIButton(196, 48, null, "パブリッシュ");
+			pubBtn_.x = uploadPanel_.x;
+			pubBtn_.y = uploadPanel_.y + PANEL_H + 6;
+			pubBtn_.addEventListener(MouseEvent.CLICK, onPublishClick);
+			ctrlPanel.addChild(pubBtn_);
+			
+			trashButton_ = new UIButton(46, 48, ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_TRASH), null);
+			trashButton_.addEventListener(MouseEvent.CLICK, onTrashClick);
+			trashButton_.x = pubBtn_.x + pubBtn_.width + 4;
+			trashButton_.y = pubBtn_.y;
+			ctrlPanel.addChild(trashButton_);
 		}
 		
 		private function createDebug(w:Number, h:Number):TextField {
@@ -166,15 +181,16 @@ package jp.pixels.pb.panels {
 		}
 		
 		private function onStoreLoaded(e:PBEvent):void {
-			onArrowClick();
+			onArrowClick(new PBEvent(PBEvent.CATALOG_ARROW, { bind:Bookflip.BIND_RIGHT } ));
 		}
 		
 		private function onUploadClick(e:MouseEvent):void {
 			uploadPanel_.select(store_.count);
 		}
 		
-		private function onArrowClick(e:MouseEvent = null):void {
-			var bind:int = arrow_.left ? Bookflip.BIND_LEFT : Bookflip.BIND_RIGHT;
+		private function onArrowClick(e:PBEvent):void {
+			bind_ = e.info["bind"];
+			var bind:int = bind_ ? Bookflip.BIND_LEFT : Bookflip.BIND_RIGHT;
 			catalogPanel_.update(store_, bind);
 			previewPanel_.initBookFlip(store_, bind);
 		}
@@ -192,11 +208,15 @@ package jp.pixels.pb.panels {
 		
 		private function onCatalogSwap(e:PBEvent):void {
 			store_.deployPages(e.info["start"], e.info["now"]);
-			previewPanel_.initBookFlip(store_, (arrow_.left ? Bookflip.BIND_LEFT : Bookflip.BIND_RIGHT));
+			previewPanel_.initBookFlip(store_, (bind_ ? Bookflip.BIND_LEFT : Bookflip.BIND_RIGHT));
 		}
 		
-		private function onCatalogTrash(e:PBEvent):void {
-			var array:Array = e.info["list"];
+		private function onPublishClick(e:MouseEvent):void {
+			externalInterfaceCall("publish", null);
+		}
+		
+		private function onTrashClick(e:MouseEvent):void {
+			var array:Array = catalogPanel_.trash();
 			var index:int;
 			var rmList:Array = new Array();
 			
@@ -205,17 +225,13 @@ package jp.pixels.pb.panels {
 				rmList.push(filename);
 				store_.removeAtIndex(index);
 			}
-			var bind:int = arrow_.left ? Bookflip.BIND_LEFT : Bookflip.BIND_RIGHT;
+			var bind:int = bind_ ? Bookflip.BIND_LEFT : Bookflip.BIND_RIGHT;
 			catalogPanel_.update(store_, bind);
 			previewPanel_.initBookFlip(store_, bind);
 			
 			server_ = new ServerCommunicator(directory_);
 			server_.addEventListener(PBEvent.REARRANGE_FINISHIED, onServerRearrangeFinished);
 			server_.rm(rmList);
-		}
-		
-		private function onPublishClick(e:PBEvent):void {
-			externalInterfaceCall("publish", null);
 		}
 		
 		private function onServerRearrangeFinished(e:PBEvent):void {

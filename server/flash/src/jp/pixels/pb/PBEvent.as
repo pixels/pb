@@ -17,8 +17,7 @@ package jp.pixels.pb
 		public static const UPLOAD_START_CLOSE:String = "UPLOAD_START_CLOSE";
 		public static const UPLOAD_COMPLETE_CLOSE:String = "UPLOAD_COMPLETE_CLOSE";
 		public static const CATALOG_SWAP:String = "CATALOG_SWAP";
-		public static const CATALOG_TRASH:String = "CATALOG_TRASH";
-		public static const PUBLISH_CLICK:String = "PUBLISH_CLICK";
+		public static const CATALOG_ARROW:String = "CATALOG_ARROW";
 		public static const REARRANGE_FINISHIED:String = "REARRANGE_FINISHIED";
 		
 		private var info_:Object;

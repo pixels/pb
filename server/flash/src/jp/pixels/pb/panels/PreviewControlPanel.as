@@ -34,12 +34,6 @@ package jp.pixels.pb.panels
 			btn.y = (controller_.height / 2) - (btn.height / 2);
 			btn.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void { dispatchEvent(new PBEvent(PBEvent.PREVIEW_RIGHT)); } );
 			controller_.addChild(btn);
-			
-			var pubBtn:UIButton = new UIButton(480, 48, null, "パブリッシュ");
-			pubBtn.x = controller_.width / 2 - pubBtn.width / 2;
-			pubBtn.y = controller_.height / 2 - pubBtn.height / 2;
-			pubBtn.addEventListener(MouseEvent.CLICK, onPubButtonClick);
-			controller_.addChild(pubBtn);
 		}
 		
 		private function createController(pageW:Number, pageH:Number):Sprite {
@@ -69,10 +63,6 @@ package jp.pixels.pb.panels
 			sp.addChild(image);
 			
 			return sp;
-		}
-		
-		private function onPubButtonClick(e:MouseEvent):void {
-			dispatchEvent(new PBEvent(PBEvent.PUBLISH_CLICK, null, true));
 		}
 	}
 }

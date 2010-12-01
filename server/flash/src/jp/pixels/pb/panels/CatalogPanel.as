@@ -12,6 +12,7 @@ package jp.pixels.pb.panels {
 	import jp.pixels.pb.gui.UIButton;
 	import jp.pixels.pb.gui.UISlideBar;
 	import jp.pixels.pb.gui.UISwitch;
+	import jp.pixels.pb.object.ArrowButton;
 	import jp.pixels.pb.object.CatalogItem;
 	import jp.pixels.pb.PBEvent;
 	import jp.pixels.pb.ResourceProvider;
@@ -52,8 +53,6 @@ package jp.pixels.pb.panels {
 		private var slider_:UISlideBar;
 		private var catalog_:Sprite;
 		private var mask_:Sprite;
-		private var trashButton_:UIButton;
-		private var uploadButton_:UIButton;
 		private var lastY_:Number;
 		private var dragMode_:int;
 		private var selectedBtn_:CatalogItem;
@@ -61,6 +60,7 @@ package jp.pixels.pb.panels {
 		private var catalogW_:Number;
 		private var catalogItemList_:Array = new Array();
 		private var catalogItemSize_:Number;
+		private var arrow_:ArrowButton;
 		private var movingRect_:Sprite;
 		private var movingPoint_:Point = new Point();
 		private var movingIndex_:int;
@@ -99,18 +99,12 @@ package jp.pixels.pb.panels {
 			slider_.setup(SLIDER_W, backH);
 			slider_.x = backW - slider_.width;
 			back_.addChild(slider_);
-			
-			trashButton_ = new UIButton(32, BUTTONS_H, ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_TRASH), null);
-			trashButton_.addEventListener(MouseEvent.CLICK, onTrashClick);
-			trashButton_.x = slider_.x + slider_.width - trashButton_.width / 2 - 2;
-			trashButton_.y = BUTTON_AREA_H / 2 - trashButton_.y / 2 + backH - (LIST_MARGIN / 2);
-			addChild(trashButton_);
-			
-			uploadButton_ = new UIButton(BUTTONS_W, BUTTONS_H, null, "更新", 0xffffff, 0x448844, 0x66aa66);
-			uploadButton_.addEventListener(MouseEvent.CLICK, onUploadClick);
-			uploadButton_.x = (backW + SLIDER_W) / 2 - uploadButton_.width / 2;
-			uploadButton_.y = BUTTON_AREA_H / 2 - uploadButton_.y / 2 + backH - (LIST_MARGIN / 2);
-			addChild(uploadButton_);
+
+			arrow_ = new ArrowButton(192, 32);
+			arrow_.addEventListener(MouseEvent.CLICK, onArrowClick);
+			arrow_.x = (backW + SLIDER_W) / 2 - arrow_.width / 2;
+			arrow_.y = BUTTON_AREA_H / 2 - arrow_.y / 2 + backH - (LIST_MARGIN / 2);
+			addChild(arrow_);
 			
 			catalogW_ = back_.width - SLIDER_W;
 			catalogItemSize_ = (catalogW_ / 2) - IMAGE_MARGIN_W;
@@ -155,6 +149,16 @@ package jp.pixels.pb.panels {
 				catalog_.addChildAt(btn, 0);
 				catalogItemList_[i] = btn;
 			}
+		}
+		
+		public function trash():Array {
+			var item:CatalogItem;
+			var list:Array = new Array();
+			for each (item in selectedList_) {
+				list.push(item.index);
+			}
+			
+			return list;
 		}
 		
 		private function cleanup():void {
@@ -297,18 +301,6 @@ package jp.pixels.pb.panels {
 			catalog_.y = -(moveLen * slider.rate);
 		}
 		
-		private function onUploadClick(e:Event):void {
-		}
-		
-		private function onTrashClick(e:Event):void {
-			var item:CatalogItem;
-			var list:Array = new Array();
-			for each (item in selectedList_) {
-				list.push(item.index);
-			}
-			dispatchEvent(new PBEvent(PBEvent.CATALOG_TRASH, { list:list } ));
-		}
-		
 		private function onWindowOpenedComplete(e:Event):void {
 			var job:KTJob = e.currentTarget as KTJob;
 			job.removeEventListener(Event.COMPLETE, onWindowOpenedComplete);
@@ -414,6 +406,10 @@ package jp.pixels.pb.panels {
 			if (catalog_.hasEventListener(Event.ENTER_FRAME)) {
 				catalog_.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			}
+		}
+		
+		private function onArrowClick(e:MouseEvent):void {
+			dispatchEvent(new PBEvent(PBEvent.CATALOG_ARROW, { bind:arrow_.left } ));
 		}
 		
 		private function onEnterFrame(e:Event):void {
