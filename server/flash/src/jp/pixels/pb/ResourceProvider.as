@@ -8,20 +8,20 @@ package jp.pixels.pb
 	public class ResourceProvider {
 		public static const IMAGE_ICON_ARROW_LEFT:String = "IMAGE_ICON_ARROW_LEFT";
 		public static const IMAGE_ICON_ARROW_RIGHT:String = "IMAGE_ICON_ARROW_RIGHT";
-		public static const IMAGE_ICON_UPLOAD:String = "IMAGE_ICON_UPLOAD";
-		public static const IMAGE_ICON_TRASH:String = "IMAGE_ICON_TRASH";
+		public static const IMAGE_ICON_MIC:String = "IMAGE_ICON_MIC";
+		public static const IMAGE_ICON_PLAY:String = "IMAGE_ICON_PLAY";
 		public static const IMAGE_BK_IPAD:String = "IMAGE_BK_IPAD";
 		public static const IMAGE_LOAD_CIRCLE:String = "IMAGE_LOAD_CIRCLE";
 		
-		[Embed("../../../../res/image/icon/arrow-left.png")]
+		[Embed("../../../../res/image/icon/prev_left.png")]
 		private static const ImageArrowLeft:Class;
-		[Embed("../../../../res/image/icon/arrow-right.png")]
+		[Embed("../../../../res/image/icon/prev_right.png")]
 		private static const ImageArrowRight:Class;
-		[Embed("../../../../res/image/icon/upload.png")]
-		private static const ImageUpload:Class;
-		[Embed("../../../../res/image/icon/trash.png")]
-		private static const ImageTrash:Class;
-		[Embed("../../../../res/image/bk/ipad.png")]
+		[Embed("../../../../res/image/icon/prev_mic.png")]
+		private static const ImageMic:Class;
+		[Embed("../../../../res/image/icon/prev_play.png")]
+		private static const ImagePlay:Class;
+		[Embed("../../../../res/image/bk/bk.png")]
 		private static const ImageIPad:Class;
 		[Embed("../../../../res/image/load/circle.png")]
 		private static const ImageLoadCircle:Class;
@@ -37,11 +37,11 @@ package jp.pixels.pb
 			else if (type == IMAGE_ICON_ARROW_RIGHT) {
 				return new ImageArrowRight();
 			}
-			else if (type == IMAGE_ICON_UPLOAD) {
-				return new ImageUpload();
+			else if (type == IMAGE_ICON_MIC) {
+				return new ImageMic();
 			}
-			else if (type == IMAGE_ICON_TRASH) {
-				return new ImageTrash();
+			else if (type == IMAGE_ICON_PLAY) {
+				return new ImagePlay();
 			}
 			else if (type == IMAGE_BK_IPAD) {
 				return new ImageIPad();

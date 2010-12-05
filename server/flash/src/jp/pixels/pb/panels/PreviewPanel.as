@@ -13,9 +13,10 @@ package jp.pixels.pb.panels {
 	 */
 	public class PreviewPanel extends Sprite {
 		
-		private const LAYER_BK:int = 0;
-		private const LAYER_BOOK:int = 1;
-		private const CONTROLLER_OFFSET_Y:Number = 400;
+		private const LAYER_IMAGE:int = 0;
+		private const LAYER_BK:int = 1;
+		private const LAYER_BOOK:int = 2;
+		private const CONTROLLER_OFFSET_Y:Number = 426;
 
 		private var pageW_:Number = 0;
 		private var pageH_:Number = 0;
@@ -36,7 +37,14 @@ package jp.pixels.pb.panels {
 			graphics.endFill();
 			
 			var bk:Bitmap = ResourceProvider.getImage(ResourceProvider.IMAGE_BK_IPAD);
-			//addChildAt(bk, LAYER_BK);
+			
+			var imageBack:Sprite = new Sprite();
+			imageBack.graphics.beginFill(0x404040);
+			imageBack.graphics.drawRect(0, 0, bk.width - 64, bk.height - 64);
+			imageBack.graphics.endFill();
+			imageBack.x = 32;
+			imageBack.y = 32;
+			addChildAt(imageBack, LAYER_IMAGE);
 			
 			back_ = new Sprite();
 			back_.graphics.beginFill(0, 0);
@@ -45,8 +53,8 @@ package jp.pixels.pb.panels {
 			back_.addChild(bk);
 			addChildAt(back_, LAYER_BK);
 			
-			controller_ = new PreviewControlPanel(Configure.PREVIEW_W - 180, 32);
-			controller_.x = Configure.PREVIEW_W / 2 - controller_.width / 2 - 4;
+			controller_ = new PreviewControlPanel(Configure.PREVIEW_W - 156, 45);
+			controller_.x = Configure.PREVIEW_W / 2 - controller_.width / 2 - 3;
 			controller_.y = CONTROLLER_OFFSET_Y;
 			controller_.addEventListener(PBEvent.PREVIEW_LEFT, onControllerLeft);
 			controller_.addEventListener(PBEvent.PREVIEW_RIGHT, onControllerRight);

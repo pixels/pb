@@ -76,7 +76,7 @@ package jp.pixels.pb.panels {
 			
 			var ellipse:Number = 16;
 			
-			setupRect(this, areaW_, areaH_, 0x7f7f7f, 1, 0, 0, ellipse);
+			setupRect(this, areaW_, areaH_, 0xea5415, 1, 0, 0, ellipse);
 			
 			var backW:Number = areaW_ - (LIST_MARGIN * 2);
 			var backH:Number = areaH_ - LIST_MARGIN - BUTTON_AREA_H;

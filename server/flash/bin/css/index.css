@@ -2,10 +2,10 @@
 
 body {
 	width: 99%;
-	height: 768px;
+	height: 560px;
 	text-align: center;
 	
-	background-color: #000000;
+	background-color: #EBEACE;
 }
 
 p, a {
@@ -21,17 +21,19 @@ h1, h2, h3, h4, p {
 }
 
 #mainFrameID {
-	width: 1200px;
+	width: 1024px;
 	margin: 0 auto;
 }
 
 #contentFrameID {
-	width: 1024px;
-	height: 768px;
+	width: 970px;
+	height: 560px;
 	margin: 0 auto;
 	
+	/*
 	border-style:solid;
-	border-color:#888888; 
+	border-color:#888888;
+	*/
 }
 
 #fc2_qr_code_header {

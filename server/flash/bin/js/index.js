@@ -18,7 +18,7 @@ var swfctrl = swfctrl || {
 		var attributes = {
 			id:"swf"
 		};
-		swfobject.embedSWF("as3PictureBooks.swf", "contentID", "1024", "768", "10.0.0", "expressInstall.swf", flashvars, params, attributes, swfctrl.onFLState);
+		swfobject.embedSWF("as3PictureBooks.swf", "contentID", "970", "560", "10.0.0", "expressInstall.swf", flashvars, params, attributes, swfctrl.onFLState);
 	},
 	
 	onFLState : function(e) {
