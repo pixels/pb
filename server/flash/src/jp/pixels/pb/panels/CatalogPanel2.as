@@ -1,8 +1,12 @@
 package jp.pixels.pb.panels {
+	import flash.display.GradientType;
 	import flash.display.Loader;
+	import flash.display.SpreadMethod;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import flash.net.URLRequest;
 	import jp.pixels.pb.object.ArrowButton;
 	import jp.pixels.pb.PBEvent;
@@ -21,6 +25,7 @@ package jp.pixels.pb.panels {
 		private var duretion_:Number = 1;
 		private var lastY_:Number;
 		private var title_:Sprite;
+		private var content_:Sprite;
 		private var arrow_:ArrowButton;
 		
 		public function CatalogPanel2(areaW:Number, areaH:Number, duretion:Number) {
@@ -44,6 +49,21 @@ package jp.pixels.pb.panels {
 			title_.y = 4 + thicknessd2;
 			addChild(title_);
 			
+			content_ = createContent(232, 340);
+			content_.x = areaW / 2 - content_.width / 2;
+			content_.y = title_.y + title_.height + 8;
+			addChild(content_);
+			var scrollBtn:Sprite;
+			scrollBtn = createScrollButton(230, 20, true);
+			scrollBtn.x = content_.width / 2 - scrollBtn.width / 2;
+			scrollBtn.y = 1;
+			content_.addChild(scrollBtn);
+			
+			scrollBtn = createScrollButton(230, 20, false);
+			scrollBtn.x = content_.width / 2 - scrollBtn.width / 2;
+			scrollBtn.y = content_.height - scrollBtn.height - 1;
+			content_.addChild(scrollBtn);
+			
 			arrow_ = new ArrowButton();
 			arrow_.addEventListener(MouseEvent.CLICK, onArrowClick);
 			arrow_.x = areaW / 2 - arrow_.width / 2;
@@ -52,7 +72,6 @@ package jp.pixels.pb.panels {
 		}
 		
 		public function update(store:Store, bind:int):void {
-			
 		}
 		
 		public function open():void {
@@ -101,6 +120,63 @@ package jp.pixels.pb.panels {
 			var l:Loader = new Loader();
 			l.load(new URLRequest(url));
 			sp.addChild(l);
+			
+			return sp;
+		}
+		
+		private function createContent(w:Number, h:Number):Sprite {
+			var thickness:Number = 1;
+			var thicknessd2:Number = thickness / 2;
+			var ellipse:Number = 8;
+			
+			var sp:Sprite = new Sprite();
+			sp.graphics.lineStyle(thickness, 0x000000);
+			sp.graphics.beginFill(0xffffff);
+			sp.graphics.drawRoundRect(thicknessd2, thicknessd2, w - thickness, h - thickness, ellipse);
+			sp.graphics.endFill();
+			
+			var mask:Sprite = new Sprite();
+			mask.graphics.beginFill(0xffffff);
+			mask.graphics.drawRoundRect(thicknessd2, thicknessd2, w - thickness, h - thickness, ellipse);
+			mask.graphics.endFill();
+			sp.mask = mask;
+			sp.addChild(mask);
+
+			return sp;
+		}
+		
+		private function createScrollButton(w:Number, h:Number, up:Boolean):Sprite {
+			var fillType:String = GradientType.LINEAR;
+			var colors:Array = [0xffffff, 0xcfcfcf];
+			var alphas:Array = [1, 1];
+			var ratios:Array = [0x00, 0xFF];
+			var mat:Matrix = new Matrix();
+			mat.createGradientBox(w, h, Math.PI * 0.5, 0, 0);
+			var spreadMethod:String = SpreadMethod.PAD;
+
+			var thickness:Number = 1;
+			var thicknessd2:Number = thickness / 2;
+			var ellipse:Number = 8;
+			var sp:Sprite = new Sprite();
+			sp.graphics.lineStyle(thickness, 0xcfcfcf);
+			sp.graphics.beginGradientFill(fillType, colors, alphas, ratios, mat, spreadMethod);
+			sp.graphics.drawRoundRect(thicknessd2, thicknessd2, w - thickness, h - thickness, ellipse);
+			sp.graphics.endFill();
+			
+			var pt:Point = new Point(w / 2, h / 2);
+			sp.graphics.beginFill(0x999999);
+			if (up) {
+				sp.graphics.moveTo(pt.x + 6, pt.y + 6);
+				sp.graphics.lineTo(pt.x, pt.y - 6);
+				sp.graphics.lineTo(pt.x - 6, pt.y + 6);
+			}
+			else {
+				sp.graphics.moveTo(pt.x - 6, pt.y - 6);
+				sp.graphics.lineTo(pt.x, pt.y + 6);
+				sp.graphics.lineTo(pt.x + 6, pt.y - 6);
+			}
+			sp.graphics.endFill();
+			
 			
 			return sp;
 		}
