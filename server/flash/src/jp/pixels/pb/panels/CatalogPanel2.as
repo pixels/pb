@@ -19,6 +19,9 @@ package jp.pixels.pb.panels {
 	 * @author Yusuke Kikkawa
 	 */
 	public class CatalogPanel2 extends Sprite {
+		private const SCROLL_SPEED:Number = 4;
+		private const SCROLL_BUTTON_WIDTH:Number = 230;
+		private const SCROLL_BUTTON_HIEGHT:Number = 20;
 		
 		private var areaW_:Number;
 		private var areaH_:Number;
@@ -27,6 +30,8 @@ package jp.pixels.pb.panels {
 		private var title_:Sprite;
 		private var content_:Sprite;
 		private var arrow_:ArrowButton;
+		private var catalog_:UICatalog;
+		private var catalogVector_:Number;
 		
 		public function CatalogPanel2(areaW:Number, areaH:Number, duretion:Number) {
 			
@@ -54,12 +59,16 @@ package jp.pixels.pb.panels {
 			content_.y = title_.y + title_.height + 8;
 			addChild(content_);
 			var scrollBtn:Sprite;
-			scrollBtn = createScrollButton(230, 20, true);
+			scrollBtn = createScrollButton(SCROLL_BUTTON_WIDTH, SCROLL_BUTTON_HIEGHT, true);
+			scrollBtn.addEventListener(MouseEvent.MOUSE_OVER, onCatalogScrollUpMouseOver);
+			scrollBtn.addEventListener(MouseEvent.MOUSE_OUT, onCatalogScrollUpMouseOut);
 			scrollBtn.x = content_.width / 2 - scrollBtn.width / 2;
 			scrollBtn.y = 1;
 			content_.addChild(scrollBtn);
 			
-			scrollBtn = createScrollButton(230, 20, false);
+			scrollBtn = createScrollButton(SCROLL_BUTTON_WIDTH, SCROLL_BUTTON_HIEGHT, false);
+			scrollBtn.addEventListener(MouseEvent.MOUSE_OVER, onCatalogScrollDownMouseOver);
+			scrollBtn.addEventListener(MouseEvent.MOUSE_OUT, onCatalogScrollUpMouseOut);
 			scrollBtn.x = content_.width / 2 - scrollBtn.width / 2;
 			scrollBtn.y = content_.height - scrollBtn.height - 1;
 			content_.addChild(scrollBtn);
@@ -72,6 +81,19 @@ package jp.pixels.pb.panels {
 		}
 		
 		public function update(store:Store, bind:int):void {
+			if (catalog_) {
+				content_.removeChild(catalog_);
+			}
+			
+			catalog_ = new UICatalog(160, content_.height - (SCROLL_BUTTON_HIEGHT * 2) - 4);
+			catalog_.update(store, bind);
+			catalog_.x = 1;
+			catalog_.y = SCROLL_BUTTON_HIEGHT + 2;
+			content_.addChild(catalog_);
+
+			if (!hasEventListener(Event.ENTER_FRAME)) {
+				addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			}
 		}
 		
 		public function open():void {
@@ -193,6 +215,24 @@ package jp.pixels.pb.panels {
 		
 		private function onArrowClick(e:MouseEvent):void {
 			dispatchEvent(new PBEvent(PBEvent.CATALOG_ARROW, { bind:arrow_.left } ));
+		}
+		
+		private function onEnterFrame(e:Event):void {
+			if (catalog_) {
+				catalog_.setScroll(catalog_.offsetY + catalogVector_);
+			}
+		}
+		
+		private function onCatalogScrollUpMouseOver(e:MouseEvent):void {
+			catalogVector_ = SCROLL_SPEED;
+		}
+		
+		private function onCatalogScrollDownMouseOver(e:MouseEvent):void {
+			catalogVector_ = -SCROLL_SPEED;
+		}
+		
+		private function onCatalogScrollUpMouseOut(e:MouseEvent):void {
+			catalogVector_ = 0;
 		}
 	}
 }

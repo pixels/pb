@@ -24,7 +24,7 @@ package jp.pixels.pb.panels {
 	 * ...
 	 * @author Yusuke Kikkawa
 	 */
-	public class CatalogPanel extends Sprite {
+	public class UICatalog extends Sprite {
 		
 		private const COVER_FRONT_LABEL:String = "表紙";
 		private const COVER_BACK_LABEL:String = "背表紙";
@@ -46,68 +46,42 @@ package jp.pixels.pb.panels {
 		
 		private var areaW_:Number;
 		private var areaH_:Number;
-		private var duretion_:Number = 1;
 		private var bind_:int;
 		private var count_:int;
-		private var back_:Sprite;
-		private var slider_:UISlideBar;
 		private var catalog_:Sprite;
 		private var mask_:Sprite;
-		private var lastY_:Number;
 		private var dragMode_:int;
 		private var selectedBtn_:CatalogItem;
 		private var selectedList_:Object = new Object();
-		private var catalogW_:Number;
 		private var catalogItemList_:Array = new Array();
 		private var catalogItemSize_:Number;
-		private var arrow_:ArrowButton;
 		private var movingRect_:Sprite;
 		private var movingPoint_:Point = new Point();
 		private var movingIndex_:int;
 		private var movingSkip_:Boolean;
-		private var scrollLocalY_:Number;
 		private var labelList_:Object = new Object();
+		private var offsetY_:Number = 0;
 		
-		public function CatalogPanel(areaW:Number, areaH:Number, duretion:Number) {
+		public function get offsetY():Number { return offsetY_; }
+		
+		public function UICatalog(areaW:Number, areaH:Number) {
 			
 			areaW_ = areaW;
 			areaH_ = areaH;
-			duretion_ = duretion;
 			
-			var ellipse:Number = 16;
+			const ellipse:Number = 16;
+			setupRect(this, areaW_, areaH_, 0xff0000, 1);
 			
-			setupRect(this, areaW_, areaH_, 0xea5415, 1, 0, 0, ellipse);
-			
-			var backW:Number = areaW_ - (LIST_MARGIN * 2);
-			var backH:Number = areaH_ - LIST_MARGIN - BUTTON_AREA_H;
-			mask_ = createRect(backW, backH, 0x00ff00, 1, 0, 0x007f00, ellipse);
-			
-			back_ = createRect(backW, backH, 0xffffff, 1, 0, 0x7f0000, ellipse);
-			back_.mask = mask_;
-			back_.x = LIST_MARGIN;
-			back_.y = LIST_MARGIN;
-			back_.addChild(mask_);
-			addChild(back_);
+			mask_ = createRect(areaW_, areaH_, 0x00ff00, 1);
+			addChild(mask_);
 			
 			catalog_ = new Sprite();
 			catalog_.addEventListener(MouseEvent.MOUSE_MOVE, onCatalogMouseMove);
 			catalog_.addEventListener(MouseEvent.MOUSE_UP, onCatalogMouseUp);
-			back_.addChild(catalog_);
+			catalog_.mask = mask_;
+			addChild(catalog_);
 			
-			slider_ = new UISlideBar();
-			slider_.addEventListener(Event.CHANGE, onSliderChange);
-			slider_.setup(SLIDER_W, backH);
-			slider_.x = backW - slider_.width;
-			back_.addChild(slider_);
-
-			arrow_ = new ArrowButton(192, 32);
-			arrow_.addEventListener(MouseEvent.CLICK, onArrowClick);
-			arrow_.x = (backW + SLIDER_W) / 2 - arrow_.width / 2;
-			arrow_.y = BUTTON_AREA_H / 2 - arrow_.y / 2 + backH - (LIST_MARGIN / 2);
-			addChild(arrow_);
-			
-			catalogW_ = back_.width - SLIDER_W;
-			catalogItemSize_ = (catalogW_ / 2) - IMAGE_MARGIN_W;
+			catalogItemSize_ = (areaW_ / 2) - IMAGE_MARGIN_W;
 
 			movingRect_ = createRect(catalogItemSize_, catalogItemSize_, 0x000000, 0.5, 0, 0, CATALOG_ELLIPSE);
 			movingRect_.mouseEnabled = false;
@@ -115,26 +89,17 @@ package jp.pixels.pb.panels {
 			catalog_.addChild(movingRect_);
 		}
 		
-		public function open():void {
-			var job:KTJob = KTween.fromTo(this, duretion_, { scaleY:0, y:y }, { scaleY:1, y:lastY_ } );
-			job.addEventListener(Event.COMPLETE, onWindowOpenedComplete);
-		}
-		
-		public function close():void {
-			lastY_ = y;
-			var job:KTJob = KTween.fromTo(this, duretion_, { scaleY:1, y:y }, { scaleY:0, y:(y + height) } );
-			job.addEventListener(Event.COMPLETE, onWindowClosedComplete);
-		}
-		
 		public function update(store:Store, bind:int):void {
-			count_ = store.count;
-			
 			cleanup();
+			
+			count_ = store.count;
 			bind_ = bind;
 			
 			var catalogH:Number = (count_ / 2 + 1) * (catalogItemSize_ + IMAGE_MARGIN_H) + IMAGE_MARGIN_H;
-			trace (catalogH);
-			setupRect(catalog_, catalogW_, catalogH, 0xffffff, 1, 1, 0xaaaaaa);
+			if (catalogH < areaH_) {
+				catalogH = areaH_;
+			}
+			setupRect(catalog_, areaW_, catalogH, 0xffffff, 1, 0, 0x0000ff);
 			
 			var i:int;
 			var btn:CatalogItem;
@@ -160,6 +125,23 @@ package jp.pixels.pb.panels {
 			}
 			
 			return list;
+		}
+		
+		public function setScroll(offsetY:Number):void {
+			offsetY_ = offsetY;
+			
+			var range:Number = catalog_.height - areaH_;
+			if (range < 0) {
+				range = 0;
+			}
+			
+			if (offsetY_ < -range) {
+				offsetY_ = -range;
+			}
+			else if (offsetY_ > 0) {
+				offsetY_ = 0;
+			}
+			catalog_.y = offsetY_;
 		}
 		
 		private function cleanup():void {
@@ -293,25 +275,6 @@ package jp.pixels.pb.panels {
 			}
 		}
 		
-		private function onSliderChange(e:Event):void {
-			var slider:UISlideBar = e.currentTarget as UISlideBar;
-			var moveLen:Number = catalog_.height - mask_.height;
-			if (moveLen < 0) {
-				moveLen = 0;
-			}
-			catalog_.y = -(moveLen * slider.rate);
-		}
-		
-		private function onWindowOpenedComplete(e:Event):void {
-			var job:KTJob = e.currentTarget as KTJob;
-			job.removeEventListener(Event.COMPLETE, onWindowOpenedComplete);
-		}
-		
-		private function onWindowClosedComplete(e:Event):void {
-			var job:KTJob = e.currentTarget as KTJob;
-			job.removeEventListener(Event.COMPLETE, onWindowClosedComplete);
-		}
-		
 		private function onButtonMouseOver(e:MouseEvent):void {
 			var item:CatalogItem = e.currentTarget as CatalogItem;
 			
@@ -337,10 +300,6 @@ package jp.pixels.pb.panels {
 			movingPoint_ = new Point(e.localX, e.localY);
 			movingIndex_ = selectedBtn_.index;
 			dragMode_ = DRAGMODE_DOWN;
-			
-			if (!catalog_.hasEventListener(Event.ENTER_FRAME)) {
-				catalog_.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			}
 		}
 		
 		private function onButtonMouseMove(e:MouseEvent):void {
@@ -376,9 +335,6 @@ package jp.pixels.pb.panels {
 					var lPt:Point = catalog_.globalToLocal(new Point(e.stageX, e.stageY));
 					movingRect_.x = lPt.x - movingPoint_.x;
 					movingRect_.y = lPt.y - movingPoint_.y;
-					
-					lPt = slider_.globalToLocal(new Point(e.stageX, e.stageY));
-					scrollLocalY_ = lPt.y;
 				}
 			}
 		}
@@ -404,30 +360,6 @@ package jp.pixels.pb.panels {
 				}
 			}
 			dragMode_ = DRAGMODE_NONE;
-			if (catalog_.hasEventListener(Event.ENTER_FRAME)) {
-				catalog_.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			}
-		}
-		
-		private function onArrowClick(e:MouseEvent):void {
-			dispatchEvent(new PBEvent(PBEvent.CATALOG_ARROW, { bind:arrow_.left } ));
-		}
-		
-		private function onEnterFrame(e:Event):void {
-			var distance:Number;
-			
-			// Up
-			distance = scrollLocalY_;
-			if (distance < CATALOG_SCROLL_RANGE) {
-				slider_.setBarY(slider_.barY - CATALOG_SCROLL_SPEED);
-			}
-			else {
-				// Down
-				distance = (slider_.height - CATALOG_SCROLL_RANGE) - scrollLocalY_;
-				if (distance < CATALOG_SCROLL_RANGE) {
-					slider_.setBarY(slider_.barY + CATALOG_SCROLL_SPEED);
-				}
-			}
 		}
 	}
 }

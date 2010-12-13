@@ -9,9 +9,7 @@ package jp.pixels.pb.panels {
 	import flash.net.URLRequest;
 	import flash.text.TextField;
 	import jp.pixels.pb.Configure;
-	import jp.pixels.pb.gui.UIButton;
 	import jp.pixels.pb.PBEvent;
-	import jp.pixels.pb.ResourceProvider;
 	import jp.pixels.pb.ServerCommunicator;
 	import jp.pixels.pb.Store;
 	import jp.pixels.pb.Util;
