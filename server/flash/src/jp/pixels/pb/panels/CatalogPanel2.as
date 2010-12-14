@@ -31,6 +31,7 @@ package jp.pixels.pb.panels {
 		private var content_:Sprite;
 		private var arrow_:ArrowButton;
 		private var catalog_:UICatalog;
+		private var voice_:VoicePanel;
 		private var catalogVector_:Number;
 		
 		public function CatalogPanel2(areaW:Number, areaH:Number, duretion:Number) {
@@ -81,15 +82,27 @@ package jp.pixels.pb.panels {
 		}
 		
 		public function update(store:Store, bind:int):void {
+			if (voice_) {
+				content_.removeChild(voice_);
+			}
 			if (catalog_) {
 				content_.removeChild(catalog_);
 			}
 			
-			catalog_ = new UICatalog(160, content_.height - (SCROLL_BUTTON_HIEGHT * 2) - 4);
+			var lines:int = (store.count / 2 + 1);
+			var bodyH:Number = content_.height - (SCROLL_BUTTON_HIEGHT * 2) - 4;
+			var bodyY:Number = SCROLL_BUTTON_HIEGHT + 2;
+			
+			catalog_ = new UICatalog(180, bodyH);
 			catalog_.update(store, bind);
 			catalog_.x = 1;
-			catalog_.y = SCROLL_BUTTON_HIEGHT + 2;
+			catalog_.y = bodyY;
 			content_.addChild(catalog_);
+			
+			voice_ = new VoicePanel(48, bodyH, lines, catalog_.itemSize, UICatalog.IMAGE_MARGIN_H);
+			voice_.x = content_.width - voice_.width - 1;
+			voice_.y = bodyY;
+			content_.addChild(voice_);
 
 			if (!hasEventListener(Event.ENTER_FRAME)) {
 				addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -220,6 +233,7 @@ package jp.pixels.pb.panels {
 		private function onEnterFrame(e:Event):void {
 			if (catalog_) {
 				catalog_.setScroll(catalog_.offsetY + catalogVector_);
+				voice_.setScroll(catalog_.offsetY);
 			}
 		}
 		

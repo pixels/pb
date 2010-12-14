@@ -26,6 +26,8 @@ package jp.pixels.pb.panels {
 	 */
 	public class UICatalog extends Sprite {
 		
+		public static const IMAGE_MARGIN_W:Number = 16;
+		public static const IMAGE_MARGIN_H:Number = 16;
 		private const COVER_FRONT_LABEL:String = "表紙";
 		private const COVER_BACK_LABEL:String = "背表紙";
 		private const LIST_MARGIN:Number = 8;
@@ -35,8 +37,6 @@ package jp.pixels.pb.panels {
 		private const BUTTONS_MARGIN_TOP:Number = 12;
 		private const BUTTONS_MARGIN_SIDE:Number = 0;
 		private const BUTTON_AREA_H:Number = 40;
-		private const IMAGE_MARGIN_W:Number = 16;
-		private const IMAGE_MARGIN_H:Number = 16;
 		private const DRAGMODE_NONE:int = 0;
 		private const DRAGMODE_DOWN:int = 1;
 		private const DRAGMODE_MOVE:int = 2;
@@ -53,8 +53,8 @@ package jp.pixels.pb.panels {
 		private var dragMode_:int;
 		private var selectedBtn_:CatalogItem;
 		private var selectedList_:Object = new Object();
-		private var catalogItemList_:Array = new Array();
-		private var catalogItemSize_:Number;
+		private var itemList_:Array = new Array();
+		private var itemSize_:Number;
 		private var movingRect_:Sprite;
 		private var movingPoint_:Point = new Point();
 		private var movingIndex_:int;
@@ -63,6 +63,7 @@ package jp.pixels.pb.panels {
 		private var offsetY_:Number = 0;
 		
 		public function get offsetY():Number { return offsetY_; }
+		public function get itemSize():Number { return itemSize_; }
 		
 		public function UICatalog(areaW:Number, areaH:Number) {
 			
@@ -81,9 +82,9 @@ package jp.pixels.pb.panels {
 			catalog_.mask = mask_;
 			addChild(catalog_);
 			
-			catalogItemSize_ = (areaW_ / 2) - IMAGE_MARGIN_W;
+			itemSize_ = (areaW_ / 2) - IMAGE_MARGIN_W;
 
-			movingRect_ = createRect(catalogItemSize_, catalogItemSize_, 0x000000, 0.5, 0, 0, CATALOG_ELLIPSE);
+			movingRect_ = createRect(itemSize_, itemSize_, 0x000000, 0.5, 0, 0, CATALOG_ELLIPSE);
 			movingRect_.mouseEnabled = false;
 			movingRect_.visible = false;
 			catalog_.addChild(movingRect_);
@@ -95,7 +96,7 @@ package jp.pixels.pb.panels {
 			count_ = store.count;
 			bind_ = bind;
 			
-			var catalogH:Number = (count_ / 2 + 1) * (catalogItemSize_ + IMAGE_MARGIN_H) + IMAGE_MARGIN_H;
+			var catalogH:Number = (count_ / 2 + 1) * (itemSize_ + IMAGE_MARGIN_H) + IMAGE_MARGIN_H;
 			if (catalogH < areaH_) {
 				catalogH = areaH_;
 			}
@@ -104,7 +105,7 @@ package jp.pixels.pb.panels {
 			var i:int;
 			var btn:CatalogItem;
 			for (i = 0; i < count_; i++ ) {
-				btn = new CatalogItem(catalogItemSize_, store.getAtIndex(i), i, CATALOG_ELLIPSE);
+				btn = new CatalogItem(itemSize_, store.getAtIndex(i), i, CATALOG_ELLIPSE);
 				btn.addEventListener(MouseEvent.MOUSE_OVER, onButtonMouseOver);
 				btn.addEventListener(MouseEvent.MOUSE_DOWN, onButtonMouseDown);
 				btn.addEventListener(MouseEvent.MOUSE_MOVE, onButtonMouseMove);
@@ -113,7 +114,7 @@ package jp.pixels.pb.panels {
 				btn.x = pt.x;
 				btn.y = pt.y;
 				catalog_.addChildAt(btn, 0);
-				catalogItemList_[i] = btn;
+				itemList_[i] = btn;
 			}
 		}
 		
@@ -146,10 +147,10 @@ package jp.pixels.pb.panels {
 		
 		private function cleanup():void {
 			var btn:CatalogItem;
-			for each (btn in catalogItemList_) {
+			for each (btn in itemList_) {
 				catalog_.removeChild(btn);
 			}
-			catalogItemList_ = new Array();
+			itemList_ = new Array();
 		}
 		
 		private function getPointByIndex(index:int, max:int, frameWidth:Number, contentWidth:Number, contentHeight:Number, bind:int):Point {
@@ -227,26 +228,26 @@ package jp.pixels.pb.panels {
 			var tmpItem:CatalogItem;
 			var pt:Point;
 			if (forward) {
-				tmpItem = catalogItemList_[end];
+				tmpItem = itemList_[end];
 				for (i = (end - 1); i >= start; i--) {
 					swapItem(i, i + 1, bind);
 				}
-				pt = getPointByIndex(start, catalogItemList_.length, catalog_.width, catalogItemSize_, catalogItemSize_, bind);
+				pt = getPointByIndex(start, itemList_.length, catalog_.width, itemSize_, itemSize_, bind);
 				tmpItem.setIndex(start);
 				tmpItem.x = pt.x;
 				tmpItem.y = pt.y;
-				catalogItemList_[start] = tmpItem;
+				itemList_[start] = tmpItem;
 			}
 			else {
-				tmpItem = catalogItemList_[start];
+				tmpItem = itemList_[start];
 				for (i = (start + 1); i <= end ; i++) {
 					swapItem(i, i - 1, bind);
 				}
-				pt = getPointByIndex(end, catalogItemList_.length, catalog_.width, catalogItemSize_, catalogItemSize_, bind);
+				pt = getPointByIndex(end, itemList_.length, catalog_.width, itemSize_, itemSize_, bind);
 				tmpItem.setIndex(end);
 				tmpItem.x = pt.x;
 				tmpItem.y = pt.y;
-				catalogItemList_[end] = tmpItem;
+				itemList_[end] = tmpItem;
 			}
 		}
 		
@@ -254,14 +255,14 @@ package jp.pixels.pb.panels {
 			var item:CatalogItem;
 			var next:CatalogItem;
 			var pt:Point;
-			pt = getPointByIndex(index2, catalogItemList_.length, catalog_.width, catalogItemSize_, catalogItemSize_, bind);
-			item = catalogItemList_[index1];
+			pt = getPointByIndex(index2, itemList_.length, catalog_.width, itemSize_, itemSize_, bind);
+			item = itemList_[index1];
 			item.x = pt.x;
 			item.y = pt.y;
 			item.setIndex(index2);
-			next = catalogItemList_[index2];
-			catalogItemList_[index2] = item;
-			catalogItemList_[index1] = next;
+			next = itemList_[index2];
+			itemList_[index2] = item;
+			itemList_[index1] = next;
 		}
 		
 		private function setupLabel(item:CatalogItem, localX:Number, localY:Number):void {
