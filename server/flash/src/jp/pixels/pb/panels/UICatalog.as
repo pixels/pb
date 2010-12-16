@@ -357,7 +357,7 @@ package jp.pixels.pb.panels {
 				selectedBtn_ = null;
 				movingRect_.visible = false;
 				if (movingIndex_ != nowIndex) {
-					dispatchEvent(new PBEvent(PBEvent.CATALOG_SWAP, { start:movingIndex_, now:nowIndex } ));
+					dispatchEvent(new PBEvent(PBEvent.CATALOG_SWAP, { start:movingIndex_, now:nowIndex }, true ));
 				}
 			}
 			dragMode_ = DRAGMODE_NONE;
