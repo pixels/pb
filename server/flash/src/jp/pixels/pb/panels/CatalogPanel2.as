@@ -121,7 +121,7 @@ package jp.pixels.pb.panels {
 		}
 		
 		public function trash():Array {
-			return null;
+			return catalog_.trash();
 		}
 		
 		private function setupRect(sp:Sprite, areaW:Number, areaH:Number, color:uint, alpha:Number=1, thicness:Number=0, lineColor:uint=0, ellipse:Number=0):void {

@@ -10,6 +10,7 @@ package jp.pixels.pb
 		public static const IMAGE_ICON_ARROW_RIGHT:String = "IMAGE_ICON_ARROW_RIGHT";
 		public static const IMAGE_ICON_MIC:String = "IMAGE_ICON_MIC";
 		public static const IMAGE_ICON_PLAY:String = "IMAGE_ICON_PLAY";
+		public static const IMAGE_ICON_STOP:String = "IMAGE_ICON_STOP";
 		public static const IMAGE_BK_IPAD:String = "IMAGE_BK_IPAD";
 		public static const IMAGE_LOAD_CIRCLE:String = "IMAGE_LOAD_CIRCLE";
 		
@@ -21,6 +22,8 @@ package jp.pixels.pb
 		private static const ImageMic:Class;
 		[Embed("../../../../res/image/icon/prev_play.png")]
 		private static const ImagePlay:Class;
+		[Embed("../../../../res/image/icon/prev_stop.png")]
+		private static const ImageStop:Class;
 		[Embed("../../../../res/image/bk/bk.png")]
 		private static const ImageIPad:Class;
 		[Embed("../../../../res/image/load/circle.png")]
@@ -42,6 +45,9 @@ package jp.pixels.pb
 			}
 			else if (type == IMAGE_ICON_PLAY) {
 				return new ImagePlay();
+			}
+			else if (type == IMAGE_ICON_STOP) {
+				return new ImageStop();
 			}
 			else if (type == IMAGE_BK_IPAD) {
 				return new ImageIPad();
