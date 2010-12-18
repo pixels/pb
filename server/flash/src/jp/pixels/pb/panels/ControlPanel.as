@@ -9,6 +9,9 @@ package jp.pixels.pb.panels {
 	import flash.net.URLRequest;
 	import flash.text.TextField;
 	import jp.pixels.pb.Configure;
+	import jp.pixels.pb.net.ConnectionEvent;
+	import jp.pixels.pb.net.Red5Event;
+	import jp.pixels.pb.net.SimpleConnection;
 	import jp.pixels.pb.PBEvent;
 	import jp.pixels.pb.ServerCommunicator;
 	import jp.pixels.pb.Store;
@@ -19,7 +22,7 @@ package jp.pixels.pb.panels {
 	 * @author Yusuke Kikkawa
 	 */
 	public class ControlPanel extends Sprite {
-		
+		private const VOICE_SERVER:String = "rtmp://good-pb.com/myapp";
 		private const ARROW_MARGIN_BOTTOM:Number = 128;
 		private const PANEL_Y:Number = 64;
 		private const PANEL_W:Number = 246;
@@ -34,6 +37,7 @@ package jp.pixels.pb.panels {
 		private var trashButton_:Sprite;
 		private var previewPanel_:PreviewPanel;
 		private var server_:ServerCommunicator;
+		private var conn_:SimpleConnection;
 		private var bind_:int = Bookflip.BIND_LEFT;
 		
 		private var debugTF_:TextField;
@@ -58,6 +62,7 @@ package jp.pixels.pb.panels {
 			}
 			
 			registExternalInterface();
+			registNetConnection();
 		}
 		
 		private function createPreviePanel():void {
@@ -171,6 +176,13 @@ package jp.pixels.pb.panels {
 			}
 		}
 		
+		private function registNetConnection():void {
+			conn_ = new SimpleConnection();
+			conn_.addEventListener(ConnectionEvent.CONNECTED, onConnected);
+			conn_.addEventListener(Red5Event.FROM_RED5, onFromRed5);
+			conn_.connect(VOICE_SERVER);
+		}
+		
 		private function onCallFromJS(e:Object):void {
 			
 			var key:String = e["key"];
@@ -190,6 +202,19 @@ package jp.pixels.pb.panels {
 					uploadPanel_.setDirectory(directory_);
 				}
 			}
+		}
+		
+		private function onConnected(e:ConnectionEvent):void {
+			trace ("onConnected");
+			
+			conn_.jInvoke("GetCurrent");
+		}
+		
+		private function onFromRed5(e:Red5Event):void {
+			var key:String = e.info["key"];
+			var value:Object = e.info["value"];
+			
+			trace ("onResponse key: " + key + " value: " + value);
 		}
 		
 		private function onStoreLoaded(e:PBEvent):void {
