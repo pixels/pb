@@ -11,6 +11,10 @@ package jp.pixels.pb
 		public static const STORE_LOADED:String = "STORE_LOADED";
 		public static const PREVIEW_LOADED:String = "PREVIEW_LOADED";
 		public static const PREVIEW_LEFT:String = "PREVIEW_LEFT";
+		public static const PREVIEW_RECORD_START:String = "PREVIEW_RECORD_START";
+		public static const PREVIEW_RECORD_STOP:String = "PREVIEW_RECORD_STOP";
+		public static const PREVIEW_PLAY_START:String = "PREVIEW_PLAY_START";
+		public static const PREVIEW_PLAY_STOP:String = "PREVIEW_PLAY_STOP";
 		public static const PREVIEW_RIGHT:String = "PREVIEW_RIGHT";
 		public static const UPLOAD_START_OPEN:String = "UPLOAD_START_OPEN";
 		public static const UPLOAD_COMPLETE_OPEN:String = "UPLOAD_COMPLETE_OPEN";

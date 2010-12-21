@@ -108,18 +108,22 @@ package jp.pixels.pb.panels
 		
 		private function onMicButton(e:MouseEvent):void {
 			visibleControl(false, false, true, false, false, false);
+			dispatchEvent(new PBEvent(PBEvent.PREVIEW_RECORD_START));
 		}
 		
 		private function onMicStopButton(e:MouseEvent):void {
 			visibleControl(true, true, false, true, false, true);
+			dispatchEvent(new PBEvent(PBEvent.PREVIEW_RECORD_STOP));
 		}
 		
 		private function onPlayButton(e:MouseEvent):void {
 			visibleControl(false, false, false, false, true, false);
+			dispatchEvent(new PBEvent(PBEvent.PREVIEW_PLAY_START));
 		}
 		
 		private function onPlayStopButton(e:MouseEvent):void {
 			visibleControl(true, true, false, true, false, true);
+			dispatchEvent(new PBEvent(PBEvent.PREVIEW_PLAY_STOP));
 		}
 	}
 }

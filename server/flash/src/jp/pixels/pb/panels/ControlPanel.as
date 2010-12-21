@@ -9,20 +9,17 @@ package jp.pixels.pb.panels {
 	import flash.net.URLRequest;
 	import flash.text.TextField;
 	import jp.pixels.pb.Configure;
-	import jp.pixels.pb.net.ConnectionEvent;
-	import jp.pixels.pb.net.Red5Event;
-	import jp.pixels.pb.net.SimpleConnection;
 	import jp.pixels.pb.PBEvent;
 	import jp.pixels.pb.ServerCommunicator;
 	import jp.pixels.pb.Store;
 	import jp.pixels.pb.Util;
+	import jp.pixels.pb.VoiceController;
 	import jp.sionnet.leaflip.Bookflip;
 	/**
 	 * ...
 	 * @author Yusuke Kikkawa
 	 */
 	public class ControlPanel extends Sprite {
-		private const VOICE_SERVER:String = "rtmp://good-pb.com/myapp";
 		private const ARROW_MARGIN_BOTTOM:Number = 128;
 		private const PANEL_Y:Number = 64;
 		private const PANEL_W:Number = 246;
@@ -37,7 +34,7 @@ package jp.pixels.pb.panels {
 		private var trashButton_:Sprite;
 		private var previewPanel_:PreviewPanel;
 		private var server_:ServerCommunicator;
-		private var conn_:SimpleConnection;
+		private var voice_:VoiceController;
 		private var bind_:int = Bookflip.BIND_LEFT;
 		
 		private var debugTF_:TextField;
@@ -51,8 +48,8 @@ package jp.pixels.pb.panels {
 			graphics.drawRect(0, 0, Configure.CONTROL_W, Configure.CONTROL_H);
 			graphics.endFill();
 
-			createPreviePanel();
-			createControlPanel();
+			setupPreviePanel();
+			setupControlPanel();
 			
 			if (Configure.DEBUG) {
 				debugTF_ = createDebug(Configure.AREA_W, 20);
@@ -62,19 +59,23 @@ package jp.pixels.pb.panels {
 			}
 			
 			registExternalInterface();
-			registNetConnection();
+			voice_ = new VoiceController();
 		}
 		
-		private function createPreviePanel():void {
+		private function setupPreviePanel():void {
 			var previewW:Number = Configure.PREVIEW_W / 2;
 			var previewH:Number = Configure.PREVIEW_H;
 			previewPanel_ = new PreviewPanel(previewW, previewH);
+			previewPanel_.addEventListener(PBEvent.PREVIEW_RECORD_START, onPreviewRecordStart);
+			previewPanel_.addEventListener(PBEvent.PREVIEW_RECORD_STOP, onPreviewRecordStop);
+			previewPanel_.addEventListener(PBEvent.PREVIEW_PLAY_START, onPreviewPlayStart);
+			previewPanel_.addEventListener(PBEvent.PREVIEW_PLAY_STOP, onPreviewPlayStop);
 			previewPanel_.x = 0;
 			previewPanel_.y = 0;
 			addChild(previewPanel_);
 		}
 		
-		private function createControlPanel():void {
+		private function setupControlPanel():void {
 			var ctrlPanel:Sprite = new Sprite();
 			ctrlPanel.graphics.beginFill(Configure.BACK_COLOR);
 			ctrlPanel.graphics.drawRect(0, 0, Configure.CONTROL_W, Configure.CONTROL_H);
@@ -176,13 +177,6 @@ package jp.pixels.pb.panels {
 			}
 		}
 		
-		private function registNetConnection():void {
-			conn_ = new SimpleConnection();
-			conn_.addEventListener(ConnectionEvent.CONNECTED, onConnected);
-			conn_.addEventListener(Red5Event.FROM_RED5, onFromRed5);
-			conn_.connect(VOICE_SERVER);
-		}
-		
 		private function onCallFromJS(e:Object):void {
 			
 			var key:String = e["key"];
@@ -204,18 +198,6 @@ package jp.pixels.pb.panels {
 			}
 		}
 		
-		private function onConnected(e:ConnectionEvent):void {
-			trace ("onConnected");
-			
-			conn_.jInvoke("GetCurrent");
-		}
-		
-		private function onFromRed5(e:Red5Event):void {
-			var key:String = e.info["key"];
-			var value:Object = e.info["value"];
-			
-			trace ("onResponse key: " + key + " value: " + value);
-		}
 		
 		private function onStoreLoaded(e:PBEvent):void {
 			onArrowClick(new PBEvent(PBEvent.CATALOG_ARROW, { bind:Bookflip.BIND_RIGHT } ));
@@ -275,6 +257,22 @@ package jp.pixels.pb.panels {
 		
 		private function onServerRearrangeFinished(e:PBEvent):void {
 			debug ("onServerRearrangeFinished");
+		}
+		
+		private function onPreviewRecordStart(e:PBEvent):void {
+			voice_.record(previewPanel_.currentIndex);
+		}
+		
+		private function onPreviewRecordStop(e:PBEvent):void {
+			voice_.stopRecording();
+		}
+		
+		private function onPreviewPlayStart(e:PBEvent):void {
+			voice_.play(previewPanel_.currentIndex);
+		}
+		
+		private function onPreviewPlayStop(e:PBEvent):void {
+			voice_.stopPlaying();
 		}
 	}
 }

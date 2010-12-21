@@ -25,12 +25,16 @@ package jp.pixels.pb.panels {
 		private var back_:Sprite;
 		private var controller_:PreviewControlPanel;
 		private var pageCount_:int;
+		private var currentIndex_:int;
+		
+		public function get currentIndex():int { return currentIndex_; }
 		
 		public function PreviewPanel(pageW:Number, pageH:Number)  {
 			
 			pageW_ = pageW;
 			pageH_ = pageH;
 			pageCount_ = 0;
+			currentIndex_ = 0;
 			
 			graphics.beginFill(Configure.BACK_COLOR);
 			graphics.drawRect(0, 0, Configure.PREVIEW_W, Configure.PREVIEW_H);
@@ -57,6 +61,10 @@ package jp.pixels.pb.panels {
 			controller_.x = Configure.PREVIEW_W / 2 - controller_.width / 2 - 3;
 			controller_.y = CONTROLLER_OFFSET_Y;
 			controller_.addEventListener(PBEvent.PREVIEW_LEFT, onControllerLeft);
+			controller_.addEventListener(PBEvent.PREVIEW_RECORD_START, function(e:PBEvent):void { dispatchEvent(e); } );
+			controller_.addEventListener(PBEvent.PREVIEW_RECORD_STOP,  function(e:PBEvent):void { dispatchEvent(e); } );
+			controller_.addEventListener(PBEvent.PREVIEW_PLAY_START,  function(e:PBEvent):void { dispatchEvent(e); } );
+			controller_.addEventListener(PBEvent.PREVIEW_PLAY_STOP,  function(e:PBEvent):void { dispatchEvent(e); } );
 			controller_.addEventListener(PBEvent.PREVIEW_RIGHT, onControllerRight);
 			back_.addChild(controller_);
 		}
@@ -98,9 +106,11 @@ package jp.pixels.pb.panels {
 			
 			if (bind_ == Bookflip.BIND_LEFT) {
 				bookFlip_.gotoPrevPage();
+				currentIndex_--;
 			}
 			else {
 				bookFlip_.gotoNextPage();
+				currentIndex_++;
 			}
 		}
 		
@@ -111,9 +121,11 @@ package jp.pixels.pb.panels {
 			
 			if (bind_ == Bookflip.BIND_LEFT) {
 				bookFlip_.gotoNextPage();
+				currentIndex_++;
 			}
 			else {
 				bookFlip_.gotoPrevPage();
+				currentIndex_--;
 			}
 		}
 	}
