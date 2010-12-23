@@ -59,7 +59,7 @@ package jp.pixels.pb.panels {
 			}
 			
 			registExternalInterface();
-			voice_ = new VoiceController();
+			voice_ = new VoiceController(directory_);
 		}
 		
 		private function setupPreviePanel():void {

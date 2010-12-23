@@ -17,12 +17,11 @@ package jp.pixels.pb {
 	 * @author Yusuke Kikkawa
 	 */
 	public class VoiceController extends EventDispatcher {
-		private const PATH:String = "room1/room2/myroom";
-		private const VOICE_SERVER:String = "rtmp://" + Configure.HOST  + "/" + Configure.APP_NAME + "/" + PATH;
 		private const MODE_NONE:String = "MODE_NONE";
 		private const MODE_RECORD:String = "MODE_RECORD";
 		private const MODE_PLAY:String = "MODE_PLAY";
 		
+		private var directory_:String;
 		private var conn_:SimpleConnection;
 		private var stream_:NetStream;
 		private var microphone_:Microphone;
@@ -30,8 +29,9 @@ package jp.pixels.pb {
 		private var filename_:String;
 		private var soundChannel_:SoundChannel;
 		
-		public function VoiceController() {
-			setupNetConnection();
+		public function VoiceController(directory:String) {
+			directory_ = directory;
+			setupNetConnection(directory_);
 		}
 		
 		public function record(pageNum:Number):Boolean {
@@ -48,7 +48,8 @@ package jp.pixels.pb {
 			setPage(pageNum);
 			mode_ = MODE_RECORD;
 			
-			conn_.jInvoke("Remove", { path:PATH, filename:filename_ } );
+			//conn_.jInvoke("GetFiles", { directory:directory_ } );
+			conn_.jInvoke("Remove", { directory:directory_, filename:filename_ } );
 			return true;
 		}
 		
@@ -59,7 +60,7 @@ package jp.pixels.pb {
 			
 			stream_.attachAudio(null);
 			stream_.close();
-			conn_.jInvoke("Convert", { path:PATH, filename:filename_ } );
+			conn_.jInvoke("Convert", { directory:directory_, filename:filename_ } );
 			mode_ = MODE_NONE;
 		}
 		
@@ -70,7 +71,7 @@ package jp.pixels.pb {
 			
 			setPage(pageNum);
 			
-			var url:String = "http://" + Configure.HOST + ":5080/" + Configure.APP_NAME + "/streams/" + PATH + "/" + filename_ + ".mp3";
+			var url:String = "http://" + Configure.HOST + ":5080/" + Configure.APP_NAME + "/streams/" + directory_ + "/" + filename_ + ".mp3";
 			var rnd:String = "r=" + Math.round(Math.random() * 1000);
 			var sound:Sound = new Sound(new URLRequest(url + "?" + rnd));
 			sound.addEventListener(IOErrorEvent.IO_ERROR, onIOPlayError);
@@ -106,11 +107,12 @@ package jp.pixels.pb {
 			return mic;
 		}
 		
-		private function setupNetConnection():void {
+		private function setupNetConnection(directory:String):void {
+			var server:String = "rtmp://" + Configure.HOST  + "/" + Configure.APP_NAME + "/" + directory;
 			conn_ = new SimpleConnection();
 			conn_.addEventListener(ConnectionEvent.CONNECTED, onConnected);
 			conn_.addEventListener(Red5Event.FROM_RED5, onFromRed5);
-			conn_.connect(VOICE_SERVER);
+			conn_.connect(server);
 		}
 		
 		private function setPage(pageNum:int):void {
@@ -146,8 +148,11 @@ package jp.pixels.pb {
 			var value:Object = e.info["value"];
 			
 			trace ("onResponse key: " + key + " value: " + value);
-			if (e.info["key"] == "ReplyRemove") {
+			if (key == "ReplyRemove") {
 				startReroding();
+			}
+			else if (key == "ReplyGetFiles") {
+				trace (value);
 			}
 		}
 
