@@ -29,12 +29,13 @@ package jp.pixels.pb.panels {
 		private var store_:Store;
 		private var upload_:Sprite;
 		private var uploadPanel_:UploadPanel;
-		private var catalogPanel_:CatalogPanel2;
+		private var catalogPanel_:CatalogPanel;
 		private var pubBtn_:Sprite;
 		private var trashButton_:Sprite;
 		private var previewPanel_:PreviewPanel;
 		private var server_:ServerCommunicator;
 		private var voice_:VoiceController;
+		private var voiceList_:Object = new Object();
 		private var bind_:int = Bookflip.BIND_LEFT;
 		
 		private var debugTF_:TextField;
@@ -60,6 +61,7 @@ package jp.pixels.pb.panels {
 			
 			registExternalInterface();
 			voice_ = new VoiceController(directory_);
+			voice_.addEventListener(PBEvent.UPDATE_VOICE_LIST, onUpdateVoiceList);
 		}
 		
 		private function setupPreviePanel():void {
@@ -96,7 +98,7 @@ package jp.pixels.pb.panels {
 			uploadPanel_.addEventListener(PBEvent.UPLOAD_COMPLETE_CLOSE, onUploadCompleteClose);
 			ctrlPanel.addChild(uploadPanel_);
 			
-			catalogPanel_ = new CatalogPanel2(PANEL_W, PANEL_H, 0.5);
+			catalogPanel_ = new CatalogPanel(PANEL_W, PANEL_H, 0.5);
 			catalogPanel_.x = Configure.CONTROL_W - catalogPanel_.width;
 			catalogPanel_.y = uploadPanel_.y;
 			catalogPanel_.addEventListener(PBEvent.CATALOG_SWAP, onCatalogSwap);
@@ -198,6 +200,11 @@ package jp.pixels.pb.panels {
 			}
 		}
 		
+		private function onUpdateVoiceList(e:PBEvent):void {
+			for each(var index:int in e.info["list"]) {
+				voiceList_[index] = index;
+			}
+		}
 		
 		private function onStoreLoaded(e:PBEvent):void {
 			onArrowClick(new PBEvent(PBEvent.CATALOG_ARROW, { bind:Bookflip.BIND_RIGHT } ));
@@ -210,7 +217,7 @@ package jp.pixels.pb.panels {
 		private function onArrowClick(e:PBEvent):void {
 			bind_ = e.info["bind"];
 			var bind:int = bind_ ? Bookflip.BIND_LEFT : Bookflip.BIND_RIGHT;
-			catalogPanel_.update(store_, bind);
+			catalogPanel_.update(store_, bind, voiceList_);
 			previewPanel_.initBookFlip(store_, bind);
 		}
 		
@@ -265,6 +272,9 @@ package jp.pixels.pb.panels {
 		
 		private function onPreviewRecordStop(e:PBEvent):void {
 			voice_.stopRecording();
+			
+			voiceList_[previewPanel_.currentIndex] = previewPanel_.currentIndex;
+			catalogPanel_.updateVoiceList(voiceList_);
 		}
 		
 		private function onPreviewPlayStart(e:PBEvent):void {

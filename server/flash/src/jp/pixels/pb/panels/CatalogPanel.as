@@ -1,21 +1,15 @@
 package jp.pixels.pb.panels {
+	import flash.display.GradientType;
+	import flash.display.Loader;
+	import flash.display.SpreadMethod;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.net.FileReference;
-	import flash.net.FileReferenceList;
-	import flash.text.engine.JustificationStyle;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
-	import jp.pixels.pb.gui.UIButton;
-	import jp.pixels.pb.gui.UISlideBar;
-	import jp.pixels.pb.gui.UISwitch;
+	import flash.net.URLRequest;
 	import jp.pixels.pb.object.ArrowButton;
-	import jp.pixels.pb.object.CatalogItem;
 	import jp.pixels.pb.PBEvent;
-	import jp.pixels.pb.ResourceProvider;
 	import jp.pixels.pb.Store;
 	import net.kawa.tween.KTJob;
 	import net.kawa.tween.KTween;
@@ -25,94 +19,98 @@ package jp.pixels.pb.panels {
 	 * @author Yusuke Kikkawa
 	 */
 	public class CatalogPanel extends Sprite {
-		
-		private const COVER_FRONT_LABEL:String = "表紙";
-		private const COVER_BACK_LABEL:String = "背表紙";
-		private const LIST_MARGIN:Number = 8;
-		private const SLIDER_W:Number = 24;
-		private const BUTTONS_W:Number = 80;
-		private const BUTTONS_H:Number = 24;
-		private const BUTTONS_MARGIN_TOP:Number = 12;
-		private const BUTTONS_MARGIN_SIDE:Number = 0;
-		private const BUTTON_AREA_H:Number = 40;
-		private const IMAGE_MARGIN_W:Number = 16;
-		private const IMAGE_MARGIN_H:Number = 16;
-		private const DRAGMODE_NONE:int = 0;
-		private const DRAGMODE_DOWN:int = 1;
-		private const DRAGMODE_MOVE:int = 2;
-		private const CATALOG_ELLIPSE:Number = 16;
-		private const CATALOG_SCROLL_RANGE:Number = 24;
-		private const CATALOG_SCROLL_SPEED:Number = 2;
+		private const SCROLL_SPEED:Number = 4;
+		private const SCROLL_BUTTON_WIDTH:Number = 230;
+		private const SCROLL_BUTTON_HIEGHT:Number = 20;
 		
 		private var areaW_:Number;
 		private var areaH_:Number;
 		private var duretion_:Number = 1;
-		private var bind_:int;
-		private var count_:int;
-		private var back_:Sprite;
-		private var slider_:UISlideBar;
-		private var catalog_:Sprite;
-		private var mask_:Sprite;
 		private var lastY_:Number;
-		private var dragMode_:int;
-		private var selectedBtn_:CatalogItem;
-		private var selectedList_:Object = new Object();
-		private var catalogW_:Number;
-		private var catalogItemList_:Array = new Array();
-		private var catalogItemSize_:Number;
+		private var title_:Sprite;
+		private var content_:Sprite;
 		private var arrow_:ArrowButton;
-		private var movingRect_:Sprite;
-		private var movingPoint_:Point = new Point();
-		private var movingIndex_:int;
-		private var movingSkip_:Boolean;
-		private var scrollLocalY_:Number;
-		private var labelList_:Object = new Object();
+		private var catalog_:UICatalog;
+		private var voice_:VoicePanel;
+		private var catalogVector_:Number;
 		
 		public function CatalogPanel(areaW:Number, areaH:Number, duretion:Number) {
 			
 			areaW_ = areaW;
 			areaH_ = areaH;
 			duretion_ = duretion;
-			
-			var ellipse:Number = 16;
-			
-			setupRect(this, areaW_, areaH_, 0xea5415, 1, 0, 0, ellipse);
-			
-			var backW:Number = areaW_ - (LIST_MARGIN * 2);
-			var backH:Number = areaH_ - LIST_MARGIN - BUTTON_AREA_H;
-			mask_ = createRect(backW, backH, 0x00ff00, 1, 0, 0x007f00, ellipse);
-			
-			back_ = createRect(backW, backH, 0xffffff, 1, 0, 0x7f0000, ellipse);
-			back_.mask = mask_;
-			back_.x = LIST_MARGIN;
-			back_.y = LIST_MARGIN;
-			back_.addChild(mask_);
-			addChild(back_);
-			
-			catalog_ = new Sprite();
-			catalog_.addEventListener(MouseEvent.MOUSE_MOVE, onCatalogMouseMove);
-			catalog_.addEventListener(MouseEvent.MOUSE_UP, onCatalogMouseUp);
-			back_.addChild(catalog_);
-			
-			slider_ = new UISlideBar();
-			slider_.addEventListener(Event.CHANGE, onSliderChange);
-			slider_.setup(SLIDER_W, backH);
-			slider_.x = backW - slider_.width;
-			back_.addChild(slider_);
 
-			arrow_ = new ArrowButton(192, 32);
+			const thickness:Number = 8;
+			const thicknessd2:Number = thickness / 2;
+			const ellipse:Number = 16;
+			graphics.beginFill(0xea5415);
+			graphics.drawRoundRect(0, 0, areaW, areaH, ellipse);
+			graphics.endFill();
+			graphics.beginFill(0xffffff);
+			graphics.drawRoundRect(thicknessd2, thicknessd2, areaW - thickness, areaH - thickness, ellipse);
+			graphics.endFill();
+			
+			title_ = createButton(211, 25, "parts/text00.png");
+			title_.x = 4 + thicknessd2;
+			title_.y = 4 + thicknessd2;
+			addChild(title_);
+			
+			content_ = createContent(232, 340);
+			content_.x = areaW / 2 - content_.width / 2;
+			content_.y = title_.y + title_.height + 8;
+			addChild(content_);
+			var scrollBtn:Sprite;
+			scrollBtn = createScrollButton(SCROLL_BUTTON_WIDTH, SCROLL_BUTTON_HIEGHT, true);
+			scrollBtn.addEventListener(MouseEvent.MOUSE_OVER, onCatalogScrollUpMouseOver);
+			scrollBtn.addEventListener(MouseEvent.MOUSE_OUT, onCatalogScrollUpMouseOut);
+			scrollBtn.x = content_.width / 2 - scrollBtn.width / 2;
+			scrollBtn.y = 1;
+			content_.addChild(scrollBtn);
+			
+			scrollBtn = createScrollButton(SCROLL_BUTTON_WIDTH, SCROLL_BUTTON_HIEGHT, false);
+			scrollBtn.addEventListener(MouseEvent.MOUSE_OVER, onCatalogScrollDownMouseOver);
+			scrollBtn.addEventListener(MouseEvent.MOUSE_OUT, onCatalogScrollUpMouseOut);
+			scrollBtn.x = content_.width / 2 - scrollBtn.width / 2;
+			scrollBtn.y = content_.height - scrollBtn.height - 1;
+			content_.addChild(scrollBtn);
+			
+			arrow_ = new ArrowButton();
 			arrow_.addEventListener(MouseEvent.CLICK, onArrowClick);
-			arrow_.x = (backW + SLIDER_W) / 2 - arrow_.width / 2;
-			arrow_.y = BUTTON_AREA_H / 2 - arrow_.y / 2 + backH - (LIST_MARGIN / 2);
+			arrow_.x = areaW / 2 - arrow_.width / 2;
+			arrow_.y = areaH - arrow_.height - thicknessd2;
 			addChild(arrow_);
+		}
+		
+		public function update(store:Store, bind:int, voiceList:Object=null):void {
+			if (voice_) {
+				content_.removeChild(voice_);
+			}
+			if (catalog_) {
+				content_.removeChild(catalog_);
+			}
 			
-			catalogW_ = back_.width - SLIDER_W;
-			catalogItemSize_ = (catalogW_ / 2) - IMAGE_MARGIN_W;
+			var lines:int = (store.count / 2 + 1);
+			var bodyH:Number = content_.height - (SCROLL_BUTTON_HIEGHT * 2) - 4;
+			var bodyY:Number = SCROLL_BUTTON_HIEGHT + 2;
+			
+			catalog_ = new UICatalog(180, bodyH);
+			catalog_.update(store, bind);
+			catalog_.x = 1;
+			catalog_.y = bodyY;
+			content_.addChild(catalog_);
+			
+			voice_ = new VoicePanel(48, bodyH, lines, catalog_.itemSize, UICatalog.IMAGE_MARGIN_H);
+			voice_.x = content_.width - voice_.width - 1;
+			voice_.y = bodyY;
+			content_.addChild(voice_);
+			
+			if (voiceList) {
+				updateVoiceList(voiceList);
+			}
 
-			movingRect_ = createRect(catalogItemSize_, catalogItemSize_, 0x000000, 0.5, 0, 0, CATALOG_ELLIPSE);
-			movingRect_.mouseEnabled = false;
-			movingRect_.visible = false;
-			catalog_.addChild(movingRect_);
+			if (!hasEventListener(Event.ENTER_FRAME)) {
+				addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			}
 		}
 		
 		public function open():void {
@@ -126,73 +124,19 @@ package jp.pixels.pb.panels {
 			job.addEventListener(Event.COMPLETE, onWindowClosedComplete);
 		}
 		
-		public function update(store:Store, bind:int):void {
-			count_ = store.count;
-			
-			cleanup();
-			bind_ = bind;
-			
-			var catalogH:Number = (count_ / 2 + 1) * (catalogItemSize_ + IMAGE_MARGIN_H) + IMAGE_MARGIN_H;
-			trace (catalogH);
-			setupRect(catalog_, catalogW_, catalogH, 0xffffff, 1, 1, 0xaaaaaa);
-			
-			var i:int;
-			var btn:CatalogItem;
-			for (i = 0; i < count_; i++ ) {
-				btn = new CatalogItem(catalogItemSize_, store.getAtIndex(i), i, CATALOG_ELLIPSE);
-				btn.addEventListener(MouseEvent.MOUSE_OVER, onButtonMouseOver);
-				btn.addEventListener(MouseEvent.MOUSE_DOWN, onButtonMouseDown);
-				btn.addEventListener(MouseEvent.MOUSE_MOVE, onButtonMouseMove);
-				btn.addEventListener(MouseEvent.MOUSE_OUT, onButtonMouseOut);
-				var pt:Point = getPointByIndex(i, count_, catalog_.width, btn.width, btn.height, bind_);
-				btn.x = pt.x;
-				btn.y = pt.y;
-				catalog_.addChildAt(btn, 0);
-				catalogItemList_[i] = btn;
-			}
-		}
-		
 		public function trash():Array {
-			var item:CatalogItem;
-			var list:Array = new Array();
-			for each (item in selectedList_) {
-				list.push(item.index);
-			}
-			
-			return list;
+			return catalog_.trash();
 		}
 		
-		private function cleanup():void {
-			var btn:CatalogItem;
-			for each (btn in catalogItemList_) {
-				catalog_.removeChild(btn);
-			}
-			catalogItemList_ = new Array();
-		}
-		
-		private function getPointByIndex(index:int, max:int, frameWidth:Number, contentWidth:Number, contentHeight:Number, bind:int):Point {
-			var f:int;
-			var pt:Point;
-			if (index == 0) {
-				return new Point(frameWidth / 2 - contentWidth / 2, IMAGE_MARGIN_H);
-			}
-			else if (index == (max - 1)) {
-				f = max / 2;
-				return new Point(frameWidth / 2 - contentWidth / 2, (contentHeight + IMAGE_MARGIN_H) * f + IMAGE_MARGIN_H);
-			}
-			else {
-				f = Math.ceil(index / 2);
-				var ox:Number;
-				if (bind == 0) {
-					ox = (index % 2 == 0) ? -contentWidth : 0;
-				}
-				else {
-					ox = (index % 2 == 1) ? -contentWidth : 0;
-				}
-				return new Point(frameWidth / 2 + ox, (contentHeight + IMAGE_MARGIN_H) * f + IMAGE_MARGIN_H);
+		public function updateVoiceList(list:Object):void {
+			if (!voice_) {
+				trace (this, "vlice_ is null");
+				return;
 			}
 			
-			return pt;
+			for each (var index:int in list) {
+				voice_.iconVisible(index, true);
+			}
 		}
 		
 		private function setupRect(sp:Sprite, areaW:Number, areaH:Number, color:uint, alpha:Number=1, thicness:Number=0, lineColor:uint=0, ellipse:Number=0):void {
@@ -217,89 +161,74 @@ package jp.pixels.pb.panels {
 			return sp;
 		}
 		
-		private function createLabel(text:String):Sprite {
-			var tf:TextField = new TextField();
-			tf.mouseEnabled = false;
-			tf.selectable = false;
-			tf.text = text;
-			tf.width = tf.textWidth + 4;
-			tf.height = tf.textHeight + 8;
-			tf.textColor = 0xffffff;
-			
+		private function createButton(w:Number, h:Number, url:String):Sprite {
 			var sp:Sprite = new Sprite();
-			sp.graphics.beginFill(0x000000, 0.5);
-			sp.graphics.drawRoundRect(0, 0, 48, 24, 8);
+			sp.graphics.beginFill(0, 0);
+			sp.graphics.drawRect(0, 0, w, h);
 			sp.graphics.endFill();
-			sp.addChild(tf);
-			tf.x = sp.width / 2 - tf.width / 2;
-			tf.y = sp.height / 2 - tf.height / 2;
+			
+			var l:Loader = new Loader();
+			l.load(new URLRequest(url));
+			sp.addChild(l);
 			
 			return sp;
 		}
 		
-		private function deployItems(beforeIndex:int, afterIndex:int, bind:int):void {
-			var forward:Boolean = afterIndex < beforeIndex;
-			var start:int = forward ? afterIndex : beforeIndex;
-			var end:int = forward ? beforeIndex : afterIndex;
-			var i:int;
-			var tmpItem:CatalogItem;
-			var pt:Point;
-			if (forward) {
-				tmpItem = catalogItemList_[end];
-				for (i = (end - 1); i >= start; i--) {
-					swapItem(i, i + 1, bind);
-				}
-				pt = getPointByIndex(start, catalogItemList_.length, catalog_.width, catalogItemSize_, catalogItemSize_, bind);
-				tmpItem.setIndex(start);
-				tmpItem.x = pt.x;
-				tmpItem.y = pt.y;
-				catalogItemList_[start] = tmpItem;
+		private function createContent(w:Number, h:Number):Sprite {
+			var thickness:Number = 1;
+			var thicknessd2:Number = thickness / 2;
+			var ellipse:Number = 8;
+			
+			var sp:Sprite = new Sprite();
+			sp.graphics.lineStyle(thickness, 0x000000);
+			sp.graphics.beginFill(0xffffff);
+			sp.graphics.drawRoundRect(thicknessd2, thicknessd2, w - thickness, h - thickness, ellipse);
+			sp.graphics.endFill();
+			
+			var mask:Sprite = new Sprite();
+			mask.graphics.beginFill(0xffffff);
+			mask.graphics.drawRoundRect(thicknessd2, thicknessd2, w - thickness, h - thickness, ellipse);
+			mask.graphics.endFill();
+			sp.mask = mask;
+			sp.addChild(mask);
+
+			return sp;
+		}
+		
+		private function createScrollButton(w:Number, h:Number, up:Boolean):Sprite {
+			var fillType:String = GradientType.LINEAR;
+			var colors:Array = [0xffffff, 0xcfcfcf];
+			var alphas:Array = [1, 1];
+			var ratios:Array = [0x00, 0xFF];
+			var mat:Matrix = new Matrix();
+			mat.createGradientBox(w, h, Math.PI * 0.5, 0, 0);
+			var spreadMethod:String = SpreadMethod.PAD;
+
+			var thickness:Number = 1;
+			var thicknessd2:Number = thickness / 2;
+			var ellipse:Number = 8;
+			var sp:Sprite = new Sprite();
+			sp.graphics.lineStyle(thickness, 0xcfcfcf);
+			sp.graphics.beginGradientFill(fillType, colors, alphas, ratios, mat, spreadMethod);
+			sp.graphics.drawRoundRect(thicknessd2, thicknessd2, w - thickness, h - thickness, ellipse);
+			sp.graphics.endFill();
+			
+			var pt:Point = new Point(w / 2, h / 2);
+			sp.graphics.beginFill(0x999999);
+			if (up) {
+				sp.graphics.moveTo(pt.x + 6, pt.y + 6);
+				sp.graphics.lineTo(pt.x, pt.y - 6);
+				sp.graphics.lineTo(pt.x - 6, pt.y + 6);
 			}
 			else {
-				tmpItem = catalogItemList_[start];
-				for (i = (start + 1); i <= end ; i++) {
-					swapItem(i, i - 1, bind);
-				}
-				pt = getPointByIndex(end, catalogItemList_.length, catalog_.width, catalogItemSize_, catalogItemSize_, bind);
-				tmpItem.setIndex(end);
-				tmpItem.x = pt.x;
-				tmpItem.y = pt.y;
-				catalogItemList_[end] = tmpItem;
+				sp.graphics.moveTo(pt.x - 6, pt.y - 6);
+				sp.graphics.lineTo(pt.x, pt.y + 6);
+				sp.graphics.lineTo(pt.x + 6, pt.y - 6);
 			}
-		}
-		
-		private function swapItem(index1:int, index2:int, bind:int):void {
-			var item:CatalogItem;
-			var next:CatalogItem;
-			var pt:Point;
-			pt = getPointByIndex(index2, catalogItemList_.length, catalog_.width, catalogItemSize_, catalogItemSize_, bind);
-			item = catalogItemList_[index1];
-			item.x = pt.x;
-			item.y = pt.y;
-			item.setIndex(index2);
-			next = catalogItemList_[index2];
-			catalogItemList_[index2] = item;
-			catalogItemList_[index1] = next;
-		}
-		
-		private function setupLabel(item:CatalogItem, localX:Number, localY:Number):void {
-			var label:Sprite = labelList_[item.name];
-			if (label) {
-				var pt:Point;
-				pt = item.localToGlobal(new Point(localX, localY));
-				pt = catalog_.globalToLocal(pt);
-				label.x = pt.x + 16;
-				label.y = pt.y;
-			}
-		}
-		
-		private function onSliderChange(e:Event):void {
-			var slider:UISlideBar = e.currentTarget as UISlideBar;
-			var moveLen:Number = catalog_.height - mask_.height;
-			if (moveLen < 0) {
-				moveLen = 0;
-			}
-			catalog_.y = -(moveLen * slider.rate);
+			sp.graphics.endFill();
+			
+			
+			return sp;
 		}
 		
 		private function onWindowOpenedComplete(e:Event):void {
@@ -312,122 +241,27 @@ package jp.pixels.pb.panels {
 			job.removeEventListener(Event.COMPLETE, onWindowClosedComplete);
 		}
 		
-		private function onButtonMouseOver(e:MouseEvent):void {
-			var item:CatalogItem = e.currentTarget as CatalogItem;
-			
-			var text:String;
-			if (item.index == 0) {
-				text = COVER_FRONT_LABEL;
-			}
-			else if (item.index == (count_ - 1)) {
-				text = COVER_BACK_LABEL;
-			}
-			else {
-				text = item.index.toString();
-			}
-			
-			var label:Sprite = createLabel(text);
-			labelList_[item.name] = label;
-			catalog_.addChild(label);
-			setupLabel(item, e.localX, e.localY);
-		}
-		
-		private function onButtonMouseDown(e:MouseEvent):void {
-			selectedBtn_ = e.currentTarget as CatalogItem;
-			movingPoint_ = new Point(e.localX, e.localY);
-			movingIndex_ = selectedBtn_.index;
-			dragMode_ = DRAGMODE_DOWN;
-			
-			if (!catalog_.hasEventListener(Event.ENTER_FRAME)) {
-				catalog_.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			}
-		}
-		
-		private function onButtonMouseMove(e:MouseEvent):void {
-			var item:CatalogItem = e.currentTarget as CatalogItem;
-			setupLabel(item, e.localX, e.localY);
-			
-			if (!selectedBtn_) {
-				return;
-			}
-			if (item.index != selectedBtn_.index) {
-				deployItems(selectedBtn_.index, item.index, bind_);
-				movingSkip_ = true;
-			}
-		}
-		
-		private function onButtonMouseOut(e:MouseEvent):void {
-			var item:CatalogItem = e.currentTarget as CatalogItem;
-			var label:Sprite = labelList_[item.name];
-			if (label) {
-				catalog_.removeChild(label);
-			}
-		}
-		
-		private function onCatalogMouseMove(e:MouseEvent):void {
-			if (selectedBtn_) {
-				if (dragMode_ == DRAGMODE_DOWN) {
-					dragMode_ = DRAGMODE_MOVE;
-					selectedBtn_.setMode(CatalogItem.MODE_MOVE);
-					movingRect_.visible = true;
-				}
-				
-				if (movingSkip_) { movingSkip_ = false; } else {
-					var lPt:Point = catalog_.globalToLocal(new Point(e.stageX, e.stageY));
-					movingRect_.x = lPt.x - movingPoint_.x;
-					movingRect_.y = lPt.y - movingPoint_.y;
-					
-					lPt = slider_.globalToLocal(new Point(e.stageX, e.stageY));
-					scrollLocalY_ = lPt.y;
-				}
-			}
-		}
-		
-		private function onCatalogMouseUp(e:MouseEvent):void {
-			if (selectedBtn_) {
-				var mode:String = CatalogItem.MODE_NORMAL;
-				if (dragMode_ == DRAGMODE_DOWN) {
-					if (selectedBtn_.mode == CatalogItem.MODE_NORMAL) {
-						mode = CatalogItem.MODE_SELECT;
-						selectedList_[selectedBtn_.name] = selectedBtn_;
-					}
-					else {
-						delete selectedList_[selectedBtn_.name];
-					}
-				}
-				var nowIndex:int = selectedBtn_.index;
-				selectedBtn_.setMode(mode);
-				selectedBtn_ = null;
-				movingRect_.visible = false;
-				if (movingIndex_ != nowIndex) {
-					dispatchEvent(new PBEvent(PBEvent.CATALOG_SWAP, { start:movingIndex_, now:nowIndex } ));
-				}
-			}
-			dragMode_ = DRAGMODE_NONE;
-			if (catalog_.hasEventListener(Event.ENTER_FRAME)) {
-				catalog_.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			}
-		}
-		
 		private function onArrowClick(e:MouseEvent):void {
 			dispatchEvent(new PBEvent(PBEvent.CATALOG_ARROW, { bind:arrow_.left } ));
 		}
 		
 		private function onEnterFrame(e:Event):void {
-			var distance:Number;
-			
-			// Up
-			distance = scrollLocalY_;
-			if (distance < CATALOG_SCROLL_RANGE) {
-				slider_.setBarY(slider_.barY - CATALOG_SCROLL_SPEED);
+			if (catalog_) {
+				catalog_.setScroll(catalog_.offsetY + catalogVector_);
+				voice_.setScroll(catalog_.offsetY);
 			}
-			else {
-				// Down
-				distance = (slider_.height - CATALOG_SCROLL_RANGE) - scrollLocalY_;
-				if (distance < CATALOG_SCROLL_RANGE) {
-					slider_.setBarY(slider_.barY + CATALOG_SCROLL_SPEED);
-				}
-			}
+		}
+		
+		private function onCatalogScrollUpMouseOver(e:MouseEvent):void {
+			catalogVector_ = SCROLL_SPEED;
+		}
+		
+		private function onCatalogScrollDownMouseOver(e:MouseEvent):void {
+			catalogVector_ = -SCROLL_SPEED;
+		}
+		
+		private function onCatalogScrollUpMouseOut(e:MouseEvent):void {
+			catalogVector_ = 0;
 		}
 	}
 }

@@ -20,6 +20,7 @@ package jp.pixels.pb.panels {
 		private var itemSize_:Number;
 		private var itemOffsetY_:Number;
 		private var mask_:Sprite, body_:Sprite;
+		private var icons_:Object = new Object();
 		
 		public function VoicePanel(w:Number, h:Number, count:int, itemSize:Number, itemOffsetY:Number) {
 			w_ = w;
@@ -45,6 +46,7 @@ package jp.pixels.pb.panels {
 			if (bmp) {
 				bmp.visible = visible;
 			}
+			icons_[index] = visible;
 		}
 		
 		private function create(w:Number, h:Number):void {
@@ -80,10 +82,11 @@ package jp.pixels.pb.panels {
 			
 			for (var i:int = 0; i < count_; i++) {
 				bmp = new Bitmap(bd);
-				list_[i] = bmp;
+				bmp.visible = icons_[i];
 				bmp.x = cx;
 				bmp.y = iosY * i + coY;
 				body_.addChild(bmp);
+				list_[i] = bmp;
 			}
 		}
 	}

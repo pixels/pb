@@ -23,6 +23,7 @@ package jp.pixels.pb
 		public static const CATALOG_SWAP:String = "CATALOG_SWAP";
 		public static const CATALOG_ARROW:String = "CATALOG_ARROW";
 		public static const REARRANGE_FINISHIED:String = "REARRANGE_FINISHIED";
+		public static const UPDATE_VOICE_LIST:String = "UPDATE_VOICE_LIST";
 		
 		private var info_:Object;
 		

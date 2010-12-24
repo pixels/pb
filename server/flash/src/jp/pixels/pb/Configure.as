@@ -8,8 +8,8 @@ package jp.pixels.pb
 	public class Configure {
 		public static const DEBUG:Boolean = true;
 		
-		//public static const HOST:String = "good-pb.com";
-		public static const HOST:String = "10.0.1.128";
+		public static const HOST:String = "good-pb.com";
+		//public static const HOST:String = "10.0.1.128";
 		public static const BASE_URL:String = "http://" + HOST;
 		public static const APP_NAME:String = "myapp";
 		public static const API_UPLOAD_URL:String = BASE_URL + "/api/upload";

@@ -45,11 +45,10 @@ package jp.pixels.pb {
 				}
 			}
 			
-			setPage(pageNum);
+			filename_ = createFilename(pageNum);
 			mode_ = MODE_RECORD;
 			
-			//conn_.jInvoke("GetFiles", { directory:directory_ } );
-			conn_.jInvoke("Remove", { directory:directory_, filename:filename_ } );
+			conn_.jInvoke("Remove", { directory:directory_, filename:filename_, only:false } );
 			return true;
 		}
 		
@@ -69,7 +68,7 @@ package jp.pixels.pb {
 				return false;
 			}
 			
-			setPage(pageNum);
+			filename_ = createFilename(pageNum);
 			
 			var url:String = "http://" + Configure.HOST + ":5080/" + Configure.APP_NAME + "/streams/" + directory_ + "/" + filename_ + ".mp3";
 			var rnd:String = "r=" + Math.round(Math.random() * 1000);
@@ -88,6 +87,15 @@ package jp.pixels.pb {
 				soundChannel_ = null;
 			}
 			mode_ = MODE_NONE;
+		}
+		
+		public function remove(pageNum:int):void {
+			filename_ = createFilename(pageNum);
+			conn_.jInvoke("Remove", { directory:directory_, filename:filename_, only:true } );
+		}
+		
+		private function getFiles():void {
+			conn_.jInvoke("GetFiles", { directory:directory_ } );
 		}
 		
 		private function createMirophone():Microphone {
@@ -115,8 +123,8 @@ package jp.pixels.pb {
 			conn_.connect(server);
 		}
 		
-		private function setPage(pageNum:int):void {
-			filename_ = Configure.VOICE_PREFIX + pageNum;
+		private function createFilename(pageNum:int):String {
+			return Configure.VOICE_PREFIX + pageNum;
 		}
 		
 		private function setupCameraStream():void {  
@@ -140,6 +148,7 @@ package jp.pixels.pb {
 		}
 		
 		private function onConnected(e:ConnectionEvent):void {
+			getFiles();
 			setupCameraStream();
 		}
 		
@@ -149,10 +158,24 @@ package jp.pixels.pb {
 			
 			trace ("onResponse key: " + key + " value: " + value);
 			if (key == "ReplyRemove") {
-				startReroding();
+				if (value) {
+					// Remove Only
+				}
+				else {
+					startReroding();
+				}
 			}
 			else if (key == "ReplyGetFiles") {
-				trace (value);
+				var a:Array = new Array();
+				if (value is Array) {
+					for each(var v:String in value) {
+						if (v.lastIndexOf(".mp3") != -1) {
+							v = v.replace(Configure.VOICE_PREFIX, "").replace(".mp3", "");
+							a.push(int(v));
+						}
+					}
+				}
+				dispatchEvent(new PBEvent(PBEvent.UPDATE_VOICE_LIST, { list:a } ));
 			}
 		}
 
