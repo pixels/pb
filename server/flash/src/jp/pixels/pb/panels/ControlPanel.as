@@ -38,8 +38,6 @@ package jp.pixels.pb.panels {
 		private var voiceList_:Object = new Object();
 		private var bind_:int = Bookflip.BIND_LEFT;
 		
-		private var debugTF_:TextField;
-		
 		public function ControlPanel() {
 			
 			store_ = new Store(Configure.PAGE_W, Configure.PAGE_H);
@@ -48,20 +46,19 @@ package jp.pixels.pb.panels {
 			graphics.beginFill(0, 0);
 			graphics.drawRect(0, 0, Configure.CONTROL_W, Configure.CONTROL_H);
 			graphics.endFill();
-
+			
+			registExternalInterface();
+		}
+		
+		private function setup(directory:String):void {
+			directory_ = directory;
+			
 			setupPreviePanel();
 			setupControlPanel();
 			
-			if (Configure.DEBUG) {
-				debugTF_ = createDebug(Configure.AREA_W, 20);
-				debugTF_.x = 0;
-				debugTF_.y = Configure.CONTROL_H - debugTF_.height;
-				addChild(debugTF_);
-			}
-			
-			registExternalInterface();
 			voice_ = new VoiceController(directory_);
 			voice_.addEventListener(PBEvent.UPDATE_VOICE_LIST, onUpdateVoiceList);
+			voice_.addEventListener(PBEvent.STOP_PLAYING_VOICE, onStopPlayingVoice)
 		}
 		
 		private function setupPreviePanel():void {
@@ -118,20 +115,6 @@ package jp.pixels.pb.panels {
 			ctrlPanel.addChild(trashButton_);
 		}
 		
-		private function createDebug(w:Number, h:Number):TextField {
-			var tf:TextField = new TextField();
-			tf.mouseEnabled = false;
-			tf.selectable = false;
-			tf.background = true;
-			tf.backgroundColor = 0xffffff;
-			tf.textColor
-			tf.width = w;
-			tf.height = h;
-			tf.text = "DEBUG MODE";
-			
-			return tf;
-		}
-		
 		private function createButton(w:Number, h:Number, url:String):Sprite {
 			var sp:Sprite = new Sprite();
 			sp.graphics.beginFill(0, 0);
@@ -143,12 +126,6 @@ package jp.pixels.pb.panels {
 			sp.addChild(l);
 			
 			return sp;
-		}
-		
-		private function debug(text:String):void {
-			if (debugTF_) {
-				debugTF_.text = text;
-			}
 		}
 		
 		private function createLine(w:Number, h:Number):Sprite {
@@ -183,19 +160,11 @@ package jp.pixels.pb.panels {
 			
 			var key:String = e["key"];
 			
-			if (Configure.DEBUG) {
-				//var val:String = "";
-				//for (var vKey:String in e["value"]) {
-					//val += " " + vKey + " " + e["value"][vKey];
-				//}
-				debug("onCallFromJS key: " + key + " value: " + e["value"]);
-			}
-			
 			if (key == "userID") {
 				var userID:String = e["value"];
 				if (userID && userID != "") {
 					directory_ = userID;
-					uploadPanel_.setDirectory(directory_);
+					setup(directory_);
 				}
 			}
 		}
@@ -203,6 +172,12 @@ package jp.pixels.pb.panels {
 		private function onUpdateVoiceList(e:PBEvent):void {
 			for each(var index:int in e.info["list"]) {
 				voiceList_[index] = index;
+			}
+		}
+		
+		private function onStopPlayingVoice(e:PBEvent):void {
+			if (previewPanel_) {
+				previewPanel_.stopPlayingVoice();
 			}
 		}
 		
@@ -263,7 +238,6 @@ package jp.pixels.pb.panels {
 		}
 		
 		private function onServerRearrangeFinished(e:PBEvent):void {
-			debug ("onServerRearrangeFinished");
 		}
 		
 		private function onPreviewRecordStart(e:PBEvent):void {

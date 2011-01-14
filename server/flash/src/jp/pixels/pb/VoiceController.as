@@ -87,6 +87,7 @@ package jp.pixels.pb {
 				soundChannel_ = null;
 			}
 			mode_ = MODE_NONE;
+			dispatchEvent(new PBEvent(PBEvent.STOP_PLAYING_VOICE));
 		}
 		
 		public function remove(pageNum:int):void {

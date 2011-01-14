@@ -6,8 +6,6 @@ package jp.pixels.pb
 	 * @author Yusuke Kikkawa
 	 */
 	public class Configure {
-		public static const DEBUG:Boolean = true;
-		
 		public static const HOST:String = "good-pb.com";
 		//public static const HOST:String = "10.0.1.128";
 		public static const BASE_URL:String = "http://" + HOST;

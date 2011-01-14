@@ -4,7 +4,7 @@
   <output>
     <movie disabled="False" />
     <movie input="" />
-    <movie path="bin\as3PictureBooks.swf" />
+    <movie path="bin\o.swf" />
     <movie fps="30" />
     <movie width="970" />
     <movie height="560" />

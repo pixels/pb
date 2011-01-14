@@ -2,6 +2,7 @@ package jp.pixels.pb.panels {
 	import flash.display.Sprite;
 	import flash.events.DataEvent;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	import flash.net.FileReference;
@@ -138,7 +139,8 @@ package jp.pixels.pb.panels {
 				req.method = URLRequestMethod.POST;
 				req.data = val;
 				
-				fr.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, onUploadCompleteData);
+				fr.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, onUploadCompleteDataOrError);
+				fr.addEventListener(IOErrorEvent.IO_ERROR, onUploadCompleteDataOrError);
 				fr.upload(req);
 				return true;
 			}
@@ -218,10 +220,14 @@ package jp.pixels.pb.panels {
 			dispatchEvent(new PBEvent(PBEvent.UPLOAD_START_OPEN));
 		}
 		
-		private function onUploadCompleteData(e:DataEvent):void {
+		private function onUploadCompleteDataOrError(e:Event):void {
+			if (e is IOErrorEvent) {
+				log(this, (e as IOErrorEvent).text);
+			}
+			
 			//trace("onUploadCompleteData data: " + e.data);
 			var fr:FileReference = e.currentTarget as FileReference;
-			fr.removeEventListener(DataEvent.UPLOAD_COMPLETE_DATA, onUploadCompleteData);
+			fr.removeEventListener(DataEvent.UPLOAD_COMPLETE_DATA, onUploadCompleteDataOrError);
 			delete waitingList_[fr.name];
 			waitingCount_--;
 			if (!nextUpload()) {

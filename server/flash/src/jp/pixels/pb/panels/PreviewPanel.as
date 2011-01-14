@@ -98,6 +98,12 @@ package jp.pixels.pb.panels {
 			bookFlip_.setGradient();
 			back_.addChildAt(bookFlip_, 0);
 		}
+		
+		public function stopPlayingVoice():void {
+			if (controller_) {
+				controller_.stopPlayingVoice();
+			}
+		}
 
 		private function onControllerLeft(e:PBEvent):void {
 			if (pageCount_ == 0) {

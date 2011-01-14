@@ -85,6 +85,10 @@ package jp.pixels.pb.panels
 			return sp;
 		}
 		
+		public function stopPlayingVoice():void {
+			visibleControl(true, true, false, true, false, true);
+		}
+		
 		private function createButton(image:Bitmap):Sprite {
 			var sp:Sprite = new Sprite();
 			sp.graphics.beginFill(0, 0);
@@ -122,7 +126,7 @@ package jp.pixels.pb.panels
 		}
 		
 		private function onPlayStopButton(e:MouseEvent):void {
-			visibleControl(true, true, false, true, false, true);
+			stopPlayingVoice();
 			dispatchEvent(new PBEvent(PBEvent.PREVIEW_PLAY_STOP));
 		}
 	}

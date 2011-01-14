@@ -24,6 +24,7 @@ package jp.pixels.pb
 		public static const CATALOG_ARROW:String = "CATALOG_ARROW";
 		public static const REARRANGE_FINISHIED:String = "REARRANGE_FINISHIED";
 		public static const UPDATE_VOICE_LIST:String = "UPDATE_VOICE_LIST";
+		public static const STOP_PLAYING_VOICE:String = "STOP_PLAYING_VOICE";
 		
 		private var info_:Object;
 		
