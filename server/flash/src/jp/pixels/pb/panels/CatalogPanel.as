@@ -93,7 +93,7 @@ package jp.pixels.pb.panels {
 			var bodyH:Number = content_.height - (SCROLL_BUTTON_HIEGHT * 2) - 4;
 			var bodyY:Number = SCROLL_BUTTON_HIEGHT + 2;
 			
-			catalog_ = new UICatalog(180, bodyH);
+			catalog_ = new UICatalog(content_.width, bodyH);
 			catalog_.update(store, bind);
 			catalog_.x = 1;
 			catalog_.y = bodyY;

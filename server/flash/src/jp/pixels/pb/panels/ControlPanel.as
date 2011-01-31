@@ -48,6 +48,9 @@ package jp.pixels.pb.panels {
 			graphics.endFill();
 			
 			registExternalInterface();
+			
+			
+			//onCallFromJS({key:"userID", value:"yktest"});
 		}
 		
 		private function setup(directory:String):void {
@@ -92,6 +95,7 @@ package jp.pixels.pb.panels {
 			uploadPanel_.x = Configure.CONTROL_W - uploadPanel_.width;
 			uploadPanel_.y = upload_.y + upload_.height + 6;
 			uploadPanel_.addEventListener(PBEvent.UPLOAD_START_OPEN, onUploadStartOpen);
+			uploadPanel_.addEventListener(PBEvent.UPLOAD_CANCEL_CLOSE, onUploadCancelClose);
 			uploadPanel_.addEventListener(PBEvent.UPLOAD_COMPLETE_CLOSE, onUploadCompleteClose);
 			ctrlPanel.addChild(uploadPanel_);
 			
@@ -182,6 +186,8 @@ package jp.pixels.pb.panels {
 		}
 		
 		private function onStoreLoaded(e:PBEvent):void {
+			uploadPanel_.close();
+			catalogPanel_.open();
 			onArrowClick(new PBEvent(PBEvent.CATALOG_ARROW, { bind:Bookflip.BIND_RIGHT } ));
 		}
 		
@@ -200,8 +206,12 @@ package jp.pixels.pb.panels {
 			catalogPanel_.close();
 		}
 		
-		private function onUploadCompleteClose(e:PBEvent):void {
+		private function onUploadCancelClose(e:PBEvent):void {
+			uploadPanel_.close();
 			catalogPanel_.open();
+		}
+		
+		private function onUploadCompleteClose(e:PBEvent):void {
 			var count:int = e.info["count"];
 			if (count > 0) {
 				var url:String = Configure.UPLOAD_URL + "/" + directory_;

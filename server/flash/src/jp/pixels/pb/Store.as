@@ -96,14 +96,14 @@ package jp.pixels.pb  {
 				list_.length--;
 			}
 			
-			if (list_.length % 2 == 1) {
-				if (usingDummy_) {
-					removeDummyPage();
-				}
-				else {
-					addDummyPage();
-				}
-			}
+			//if (list_.length % 2 == 1) {
+				//if (usingDummy_) {
+					//removeDummyPage();
+				//}
+				//else {
+					//addDummyPage();
+				//}
+			//}
 		}
 		
 		private function swapItem(index1:int, index2:int):void {
@@ -172,9 +172,9 @@ package jp.pixels.pb  {
 				request(url_, next);
 			}
 			else {
-				if (pageCount_ % 2 == 1) {
-					addDummyPage();
-				}
+				//if (pageCount_ % 2 == 1) {
+					//addDummyPage();
+				//}
 				trace ("all loaded!!");
 				dispatchEvent(new PBEvent(PBEvent.STORE_LOADED));
 			}

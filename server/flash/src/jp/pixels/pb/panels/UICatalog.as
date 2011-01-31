@@ -130,6 +130,10 @@ package jp.pixels.pb.panels {
 		
 		public function setScroll(offsetY:Number):void {
 			offsetY_ = offsetY;
+			if (isNaN(offsetY_)) {
+				trace(this, "offsetY_ is NaN");
+				offsetY_ = 0;
+			}
 			
 			var range:Number = catalog_.height - areaH_;
 			if (range < 0) {
@@ -159,7 +163,11 @@ package jp.pixels.pb.panels {
 			if (index == 0) {
 				return new Point(frameWidth / 2 - contentWidth / 2, IMAGE_MARGIN_H);
 			}
-			else if (index == (max - 1)) {
+			//else if (index == (max - 1)) {
+				//f = max / 2;
+				//return new Point(frameWidth / 2 - contentWidth / 2, (contentHeight + IMAGE_MARGIN_H) * f + IMAGE_MARGIN_H);
+			//}
+			else if (index == (max - 1) && (max % 2 == 0)) {
 				f = max / 2;
 				return new Point(frameWidth / 2 - contentWidth / 2, (contentHeight + IMAGE_MARGIN_H) * f + IMAGE_MARGIN_H);
 			}
@@ -283,7 +291,7 @@ package jp.pixels.pb.panels {
 			if (item.index == 0) {
 				text = COVER_FRONT_LABEL;
 			}
-			else if (item.index == (count_ - 1)) {
+			else if (item.index == (count_ - 1) && (count_ % 2 == 0)) {
 				text = COVER_BACK_LABEL;
 			}
 			else {

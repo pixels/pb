@@ -80,13 +80,13 @@ package jp.pixels.pb.panels {
 			loading_ = new Loading(back_.width, back_.height);
 			back_.addChild(loading_);
 			
-			cancelButton_ = new UIButton(BUTTONS_W, BUTTONS_H, null, "キャンセル", 0xffffff, 0x884444, 0xaa6666);
+			cancelButton_ = new UIButton(BUTTONS_W, BUTTONS_H, null, "キャンセル", 0xffffff, 0xea5415, 0xeb6c3d);
 			cancelButton_.addEventListener(MouseEvent.CLICK, onCancelClick);
 			cancelButton_.x = back_.x + BUTTONS_MARGIN_SIDE;
 			cancelButton_.y = listTF_.y + back_.height + BUTTONS_MARGIN_TOP;
 			addChild(cancelButton_);
 			
-			uploadButton_ = new UIButton(BUTTONS_W, BUTTONS_H, null, "追加", 0xffffff, 0x448844, 0x66aa66);
+			uploadButton_ = new UIButton(BUTTONS_W, BUTTONS_H, null, "追加", 0xffffff, 0xea5415, 0xeb6c3d);
 			uploadButton_.addEventListener(MouseEvent.CLICK, onUploadClick);
 			uploadButton_.x = back_.width - uploadButton_.width - BUTTONS_MARGIN_SIDE;
 			uploadButton_.y = listTF_.y + back_.height + BUTTONS_MARGIN_TOP;
@@ -115,10 +115,18 @@ package jp.pixels.pb.panels {
 			return true;
 		}
 		
+		public function close():void {
+			loading_.hidden();
+			clearList(listTF_);
+			var job:KTJob = KTween.fromTo(this, duretion_, { scaleY:1 }, { scaleY:0 } );
+			job.addEventListener(Event.COMPLETE, onWindowClosedComplete);
+			dispatchEvent(new PBEvent(PBEvent.UPLOAD_START_CLOSE));
+		}
+		
 		private function upload():void {
 			maxCount_ = fileReferenceList_.fileList.length;
 			if (maxCount_ == 0) {
-				close();
+				dispatchEvent(new PBEvent(PBEvent.UPLOAD_COMPLETE_CLOSE, { count:maxCount_ } ));
 			}
 			else {
 				loading_.show();
@@ -148,28 +156,16 @@ package jp.pixels.pb.panels {
 			return false;
 		}
 		
-		private function cancel():void {
-			close();
-		}
-		
-		private function close():void {
-			loading_.hidden();
-			clearList(listTF_);
-			var job:KTJob = KTween.fromTo(this, duretion_, { scaleY:1 }, { scaleY:0 } );
-			job.addEventListener(Event.COMPLETE, onWindowClosedComplete);
-			dispatchEvent(new PBEvent(PBEvent.UPLOAD_START_CLOSE));
-		}
-		
 		private function setupBackground(areaW:Number, areaH:Number):void {
-			graphics.beginFill(0x888888);
+			graphics.beginFill(0xea5415);
 			graphics.drawRoundRect(0, 0, areaW, areaH, 16);
 			graphics.endFill();
 		}
 		
 		private function createBackground(areaW:Number, areaH:Number):Sprite {
 			var sp:Sprite = new Sprite();
-			sp.graphics.lineStyle(2, 0x888888);
-			sp.graphics.beginFill(0xdddddd);
+			sp.graphics.lineStyle(2, 0xea5415);
+			sp.graphics.beginFill(0xea5415);
 			sp.graphics.drawRect(0, 0, areaW, areaH);
 			sp.graphics.endFill();
 			
@@ -206,7 +202,7 @@ package jp.pixels.pb.panels {
 		}
 		
 		private function onCancelClick(e:Event):void {
-			cancel();
+			dispatchEvent(new PBEvent(PBEvent.UPLOAD_CANCEL_CLOSE));
 		}
 		
 		private function onUploadClick(e:Event):void {
@@ -231,14 +227,13 @@ package jp.pixels.pb.panels {
 			delete waitingList_[fr.name];
 			waitingCount_--;
 			if (!nextUpload()) {
-				close();
+				dispatchEvent(new PBEvent(PBEvent.UPLOAD_COMPLETE_CLOSE, { count:maxCount_ } ));
 			}
 		}
 		
 		private function onWindowOpenedComplete(e:Event):void {
 			var job:KTJob = e.currentTarget as KTJob;
 			job.removeEventListener(Event.COMPLETE, onWindowOpenedComplete);
-			dispatchEvent(new PBEvent(PBEvent.UPLOAD_COMPLETE_OPEN));
 			
 			clearList(listTF_);
 			var frl:FileReferenceList = fileReferenceList_;
@@ -251,7 +246,6 @@ package jp.pixels.pb.panels {
 		private function onWindowClosedComplete(e:Event):void {
 			var job:KTJob = e.currentTarget as KTJob;
 			job.removeEventListener(Event.COMPLETE, onWindowClosedComplete);
-			dispatchEvent(new PBEvent(PBEvent.UPLOAD_COMPLETE_CLOSE, { count:maxCount_ } ));
 			opend_ = false;
 		}
 	}

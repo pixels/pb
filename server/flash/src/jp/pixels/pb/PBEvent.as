@@ -17,8 +17,8 @@ package jp.pixels.pb
 		public static const PREVIEW_PLAY_STOP:String = "PREVIEW_PLAY_STOP";
 		public static const PREVIEW_RIGHT:String = "PREVIEW_RIGHT";
 		public static const UPLOAD_START_OPEN:String = "UPLOAD_START_OPEN";
-		public static const UPLOAD_COMPLETE_OPEN:String = "UPLOAD_COMPLETE_OPEN";
 		public static const UPLOAD_START_CLOSE:String = "UPLOAD_START_CLOSE";
+		public static const UPLOAD_CANCEL_CLOSE:String = "UPLOAD_CANCEL_CLOSE";
 		public static const UPLOAD_COMPLETE_CLOSE:String = "UPLOAD_COMPLETE_CLOSE";
 		public static const CATALOG_SWAP:String = "CATALOG_SWAP";
 		public static const CATALOG_ARROW:String = "CATALOG_ARROW";
