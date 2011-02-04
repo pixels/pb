@@ -3,8 +3,10 @@ package jp.pixels.pb  {
 	import flash.display.BitmapData;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
+	import flash.errors.IOError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.IOErrorEvent;
 	import flash.geom.Matrix;
 	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
@@ -54,6 +56,7 @@ package jp.pixels.pb  {
 			var req:URLRequest = new URLRequest(reqURL);
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoaderComplete);
+			loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
 			loader.load(req, new LoaderContext());
 		}
 		
@@ -145,6 +148,7 @@ package jp.pixels.pb  {
 		private function onLoaderComplete(e:Event):void {
 			var li:LoaderInfo = e.target as LoaderInfo;
 			li.removeEventListener(Event.COMPLETE, onLoaderComplete);
+			li.removeEventListener(IOErrorEvent.IO_ERROR, onIOError);
 			
 			var loader:Loader = li.loader;
 			var rate:Number = Util.resize(loader.width, loader.height, maxPageW_, maxPageH_);
@@ -178,6 +182,11 @@ package jp.pixels.pb  {
 				trace ("all loaded!!");
 				dispatchEvent(new PBEvent(PBEvent.STORE_LOADED));
 			}
+		}
+		
+		private function onIOError(e:IOErrorEvent):void {
+			log(this, "onIOError image request is failed.", e);
+			dispatchEvent(new PBEvent(PBEvent.STORE_LOADED));
 		}
 	}
 }

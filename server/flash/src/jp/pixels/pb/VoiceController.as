@@ -95,6 +95,10 @@ package jp.pixels.pb {
 			conn_.jInvoke("Remove", { directory:directory_, filename:filename_, only:true } );
 		}
 		
+		private function getCurrent():void {
+			conn_.jInvoke("GetCurrent" );
+		}
+		
 		private function getFiles():void {
 			conn_.jInvoke("GetFiles", { directory:directory_ } );
 		}
@@ -149,6 +153,7 @@ package jp.pixels.pb {
 		}
 		
 		private function onConnected(e:ConnectionEvent):void {
+			//getCurrent();
 			getFiles();
 			setupCameraStream();
 		}
