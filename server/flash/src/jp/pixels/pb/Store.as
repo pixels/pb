@@ -22,6 +22,7 @@ package jp.pixels.pb  {
 		private var dict_:Object = new Object();
 		private var list_:Array = new Array();
 		private var url_:String;
+		private var encID_:String;
 		private var pageCount_:int;
 		private var oddCount_:int;
 		private var uploadIndexOffset_:int;
@@ -36,8 +37,9 @@ package jp.pixels.pb  {
 			maxPageH_ = maxPageH;
 		}
 		
-		public function setup(url:String, pageCount:int, addMode:Boolean):void {
+		public function setup(url:String, encID:String, pageCount:int, addMode:Boolean):void {
 			url_ = url;
+			encID_ = encID;
 			pageCount_ = pageCount;
 			oddCount_ = pageCount;
 			
@@ -46,12 +48,15 @@ package jp.pixels.pb  {
 			}
 			
 			uploadIndexOffset_ = list_.length;
-			request(url_, 1 + uploadIndexOffset_);
+			request(url_, encID_, 1 + uploadIndexOffset_);
 		}
 		
-		public function request(url:String, page:int):void {
-			var reqURL:String = url + "/" + Util.fillZero(page, 4) + "." + Configure.EXTENSION + "?" + Util.rParam();
+		public function request(url:String, encID:String, page:int):void {
+			var path:String = "/" + encID + "/" + Util.fillZero(page, 4) + "." + Configure.EXTENSION;
+			var randParam:String = "?" + Util.rParam();
+			var reqURL:String = Util.authToken(url, Configure.SECRET, path) + randParam;
 			//trace ("request reqURL: " + reqURL);
+			//return;
 
 			var req:URLRequest = new URLRequest(reqURL);
 			var loader:Loader = new Loader();
@@ -173,7 +178,7 @@ package jp.pixels.pb  {
 			oddCount_--;
 			if (oddCount_ > 0) {
 				var next:int = pageCount_ - (oddCount_ - 1) + uploadIndexOffset_;
-				request(url_, next);
+				request(url_, encID_, next);
 			}
 			else {
 				//if (pageCount_ % 2 == 1) {

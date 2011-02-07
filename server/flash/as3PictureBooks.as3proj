@@ -48,6 +48,7 @@
   <!-- SWC Libraries -->
   <libraryPaths>
     <element path="lib\ktween.swc" />
+    <element path="lib\as3crypto.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

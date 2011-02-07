@@ -20,13 +20,13 @@ package jp.pixels.pb {
 		
 		private var queue_:Array = new Array();
 		private var status_:String = STATUS_NONE;
-		private var directory_:String;
+		private var encID_:String;
 		
-		public function get directory():String { return directory_; }
-		public function set directory(value:String):void { directory_ = value; }
+		public function get encID():String { return encID_; }
+		public function set encID(value:String):void { encID_ = value; }
 		
-		public function ServerCommunicator(directory:String) {
-			directory_ = directory;
+		public function ServerCommunicator(encID:String) {
+			encID_ = encID;
 		}
 		
 		public function add():void {
@@ -60,7 +60,7 @@ package jp.pixels.pb {
 				
 			}
 			else if (status_ == STATUS_REMOVING) {
-				val["directory"] = directory_;
+				val["directory"] = encID_;
 				val["filename"] = queue_[queue_.length - 1];
 
 				req.url = Configure.API_DELETE_URL;
@@ -68,7 +68,7 @@ package jp.pixels.pb {
 				l.addEventListener(Event.COMPLETE, onDeleteCompleteData);
 			}
 			else if (status_ == STATUS_REARRANGE) {
-				val["directory"] = directory_;
+				val["directory"] = encID_;
 				val["start_index"] = 1;
 				val["figure"] = 4;
 				val["extension"] = Configure.EXTENSION;

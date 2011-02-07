@@ -37,7 +37,7 @@ package jp.pixels.pb.panels {
 		
 		private var areaW_:Number;
 		private var areaH_:Number;
-		private var directory_:String;
+		private var encID_:String;
 		private var fileReferenceList_:FileReferenceList;
 		private var waitingList_:Object = new Object();
 		private var uploadIndexOffset_:int;
@@ -52,12 +52,12 @@ package jp.pixels.pb.panels {
 		private var cancelButton_:UIButton;
 		private var uploadButton_:UIButton;
 		
-		public function UploadPanel(areaW:Number, areaH:Number, duretion:Number, directory:String) {
+		public function UploadPanel(areaW:Number, areaH:Number, duretion:Number, encID:String) {
 			
 			areaW_ = areaW;
 			areaH_ = areaH;
 			duretion_ = duretion;
-			setDirectory(directory);
+			setEncID(encID);
 			
 			setupBackground(areaW_, areaH_);
 			
@@ -95,8 +95,8 @@ package jp.pixels.pb.panels {
 			scaleY = 0;
 		}
 		
-		public function setDirectory(directory:String):void {
-			directory_ = directory;
+		public function setEncID(encID:String):void {
+			encID_ = encID;
 		}
 		
 		public function select(uploadIndexOffset:int=0):Boolean {
@@ -140,7 +140,7 @@ package jp.pixels.pb.panels {
 			if (index >= 0) {
 				var fr:FileReference = fileReferenceList_.fileList[index];
 				var val:URLVariables = new URLVariables();
-				val["directory"] = directory_;
+				val["directory"] = encID_;
 				val["filename"] = Util.fillZero(waitingCount_ + uploadIndexOffset_, 4) + "." + Configure.EXTENSION;
 				
 				var req:URLRequest = new URLRequest(Configure.API_UPLOAD_URL);

@@ -21,7 +21,7 @@ package jp.pixels.pb {
 		private const MODE_RECORD:String = "MODE_RECORD";
 		private const MODE_PLAY:String = "MODE_PLAY";
 		
-		private var directory_:String;
+		private var encID_:String;
 		private var conn_:SimpleConnection;
 		private var stream_:NetStream;
 		private var microphone_:Microphone;
@@ -29,9 +29,9 @@ package jp.pixels.pb {
 		private var filename_:String;
 		private var soundChannel_:SoundChannel;
 		
-		public function VoiceController(directory:String) {
-			directory_ = directory;
-			setupNetConnection(directory_);
+		public function VoiceController(encID:String) {
+			encID_ = encID;
+			setupNetConnection(encID_);
 		}
 		
 		public function record(pageNum:Number):Boolean {
@@ -48,7 +48,7 @@ package jp.pixels.pb {
 			filename_ = createFilename(pageNum);
 			mode_ = MODE_RECORD;
 			
-			conn_.jInvoke("Remove", { directory:directory_, filename:filename_, only:false } );
+			conn_.jInvoke("Remove", { directory:encID_, filename:filename_, only:false } );
 			return true;
 		}
 		
@@ -59,7 +59,7 @@ package jp.pixels.pb {
 			
 			stream_.attachAudio(null);
 			stream_.close();
-			conn_.jInvoke("Convert", { directory:directory_, filename:filename_ } );
+			conn_.jInvoke("Convert", { directory:encID_, filename:filename_ } );
 			mode_ = MODE_NONE;
 		}
 		
@@ -70,9 +70,10 @@ package jp.pixels.pb {
 			
 			filename_ = createFilename(pageNum);
 			
-			var url:String = "http://" + Configure.HOST + ":5080/" + Configure.APP_NAME + "/streams/" + directory_ + "/" + filename_ + ".mp3";
-			var rnd:String = "r=" + Math.round(Math.random() * 1000);
-			var sound:Sound = new Sound(new URLRequest(url + "?" + rnd));
+			var url:String = "http://" + Configure.HOST + ":5080/" + Configure.APP_NAME + "/streams/" + encID_ + "/" + filename_ + ".mp3";
+			var randParam:String = "?" + Util.rParam();
+			var reqURL:String = url + randParam;
+			var sound:Sound = new Sound(new URLRequest(reqURL));
 			sound.addEventListener(IOErrorEvent.IO_ERROR, onIOPlayError);
 			soundChannel_ = sound.play();
 			soundChannel_.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
@@ -92,7 +93,7 @@ package jp.pixels.pb {
 		
 		public function remove(pageNum:int):void {
 			filename_ = createFilename(pageNum);
-			conn_.jInvoke("Remove", { directory:directory_, filename:filename_, only:true } );
+			conn_.jInvoke("Remove", { directory:encID_, filename:filename_, only:true } );
 		}
 		
 		private function getCurrent():void {
@@ -100,7 +101,7 @@ package jp.pixels.pb {
 		}
 		
 		private function getFiles():void {
-			conn_.jInvoke("GetFiles", { directory:directory_ } );
+			conn_.jInvoke("GetFiles", { directory:encID_ } );
 		}
 		
 		private function createMirophone():Microphone {
@@ -120,8 +121,8 @@ package jp.pixels.pb {
 			return mic;
 		}
 		
-		private function setupNetConnection(directory:String):void {
-			var server:String = "rtmp://" + Configure.HOST  + "/" + Configure.APP_NAME + "/" + directory;
+		private function setupNetConnection(encID:String):void {
+			var server:String = "rtmp://" + Configure.HOST  + "/" + Configure.APP_NAME + "/" + encID;
 			conn_ = new SimpleConnection();
 			conn_.addEventListener(ConnectionEvent.CONNECTED, onConnected);
 			conn_.addEventListener(Red5Event.FROM_RED5, onFromRed5);

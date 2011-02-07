@@ -25,7 +25,7 @@ package jp.pixels.pb.panels {
 		private const PANEL_W:Number = 246;
 		private const PANEL_H:Number = 426;
 		
-		private var directory_:String = "pbweb";
+		private var encID_:String = "pbweb";
 		private var store_:Store;
 		private var upload_:Sprite;
 		private var uploadPanel_:UploadPanel;
@@ -53,13 +53,13 @@ package jp.pixels.pb.panels {
 			//onCallFromJS({key:"userID", value:"yktest"});
 		}
 		
-		private function setup(directory:String):void {
-			directory_ = directory;
+		private function setup(encID:String):void {
+			encID_ = encID;
 			
 			setupPreviePanel();
 			setupControlPanel();
 			
-			voice_ = new VoiceController(directory_);
+			voice_ = new VoiceController(encID_);
 			voice_.addEventListener(PBEvent.UPDATE_VOICE_LIST, onUpdateVoiceList);
 			voice_.addEventListener(PBEvent.STOP_PLAYING_VOICE, onStopPlayingVoice)
 		}
@@ -91,7 +91,7 @@ package jp.pixels.pb.panels {
 			upload_.addEventListener(MouseEvent.CLICK, onUploadClick);
 			ctrlPanel.addChild(upload_);
 			
-			uploadPanel_ = new UploadPanel(PANEL_W, PANEL_H, 0.5, directory_);
+			uploadPanel_ = new UploadPanel(PANEL_W, PANEL_H, 0.5, encID_);
 			uploadPanel_.x = Configure.CONTROL_W - uploadPanel_.width;
 			uploadPanel_.y = upload_.y + upload_.height + 6;
 			uploadPanel_.addEventListener(PBEvent.UPLOAD_START_OPEN, onUploadStartOpen);
@@ -167,8 +167,8 @@ package jp.pixels.pb.panels {
 			if (key == "userID") {
 				var userID:String = e["value"];
 				if (userID && userID != "") {
-					directory_ = userID;
-					setup(directory_);
+					encID_ = userID;
+					setup(encID_);
 				}
 			}
 		}
@@ -214,8 +214,8 @@ package jp.pixels.pb.panels {
 		private function onUploadCompleteClose(e:PBEvent):void {
 			var count:int = e.info["count"];
 			if (count > 0) {
-				var url:String = Configure.UPLOAD_URL + "/" + directory_;
-				store_.setup(url, count, true);
+				var url:String = Configure.UPLOAD_URL;
+				store_.setup(url, encID_, count, true);
 			}
 		}
 		
@@ -242,7 +242,7 @@ package jp.pixels.pb.panels {
 			catalogPanel_.update(store_, bind);
 			previewPanel_.initBookFlip(store_, bind);
 			
-			server_ = new ServerCommunicator(directory_);
+			server_ = new ServerCommunicator(encID_);
 			server_.addEventListener(PBEvent.REARRANGE_FINISHIED, onServerRearrangeFinished);
 			server_.rm(rmList);
 		}
