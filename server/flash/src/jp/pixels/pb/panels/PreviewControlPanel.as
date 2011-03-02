@@ -12,6 +12,8 @@ package jp.pixels.pb.panels
 	 * @author Yusuke Kikkawa
 	 */
 	public class PreviewControlPanel extends Sprite {
+		private const USE_VOIDE:Boolean = false;
+		
 		private var pageW_:Number;
 		private var pageH_:Number;
 		private var controller_:Sprite;
@@ -36,35 +38,37 @@ package jp.pixels.pb.panels
 			controller_.addChild(btn);
 			leftButton_ = btn;
 			
-			btn = createButton(ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_MIC));
-			btn.addEventListener(MouseEvent.CLICK, onMicButton);
-			btn.x = controller_.width / 2 - btn.width / 2 - 32;
-			btn.y = (controller_.height / 2) - (btn.height / 2);
-			controller_.addChild(btn);
-			micButton_ = btn;
+			if (USE_VOIDE) {
+				btn = createButton(ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_MIC));
+				btn.addEventListener(MouseEvent.CLICK, onMicButton);
+				btn.x = controller_.width / 2 - btn.width / 2 - 32;
+				btn.y = (controller_.height / 2) - (btn.height / 2);
+				controller_.addChild(btn);
+				micButton_ = btn;
+				
+				btn = createButton(ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_STOP));
+				btn.addEventListener(MouseEvent.CLICK, onMicStopButton);
+				btn.x = controller_.width / 2 - btn.width / 2 - 32;
+				btn.y = (controller_.height / 2) - (btn.height / 2);
+				controller_.addChild(btn);
+				micStopButton_ = btn;
+				micStopButton_.visible = false;
 			
-			btn = createButton(ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_STOP));
-			btn.addEventListener(MouseEvent.CLICK, onMicStopButton);
-			btn.x = controller_.width / 2 - btn.width / 2 - 32;
-			btn.y = (controller_.height / 2) - (btn.height / 2);
-			controller_.addChild(btn);
-			micStopButton_ = btn;
-			micStopButton_.visible = false;
-			
-			btn = createButton(ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_PLAY));
-			btn.addEventListener(MouseEvent.CLICK, onPlayButton);
-			btn.x = controller_.width / 2 - btn.width / 2 + 32;
-			btn.y = (controller_.height / 2) - (btn.height / 2);
-			controller_.addChild(btn);
-			playButton_ = btn;
-			
-			btn = createButton(ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_STOP));
-			btn.addEventListener(MouseEvent.CLICK, onPlayStopButton);
-			btn.x = controller_.width / 2 - btn.width / 2 + 32;
-			btn.y = (controller_.height / 2) - (btn.height / 2);
-			controller_.addChild(btn);
-			playStopButton_ = btn;
-			playStopButton_.visible = false;
+				btn = createButton(ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_PLAY));
+				btn.addEventListener(MouseEvent.CLICK, onPlayButton);
+				btn.x = controller_.width / 2 - btn.width / 2 + 32;
+				btn.y = (controller_.height / 2) - (btn.height / 2);
+				controller_.addChild(btn);
+				playButton_ = btn;
+				
+				btn = createButton(ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_STOP));
+				btn.addEventListener(MouseEvent.CLICK, onPlayStopButton);
+				btn.x = controller_.width / 2 - btn.width / 2 + 32;
+				btn.y = (controller_.height / 2) - (btn.height / 2);
+				controller_.addChild(btn);
+				playStopButton_ = btn;
+				playStopButton_.visible = false;
+			}
 			
 			btn = createButton(ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_ARROW_RIGHT));
 			btn.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void { dispatchEvent(new PBEvent(PBEvent.PREVIEW_RIGHT)); } );
@@ -103,10 +107,14 @@ package jp.pixels.pb.panels
 		
 		private function visibleControl(left:Boolean, mic:Boolean, micStop:Boolean, play:Boolean, playStop:Boolean, right:Boolean):void {
 			leftButton_.visible = left;
-			micButton_.visible = mic;
-			micStopButton_.visible = micStop;
-			playButton_.visible = play;
-			playStopButton_.visible = playStop;
+			
+			if (USE_VOIDE) {
+				micButton_.visible = mic;
+				micStopButton_.visible = micStop;
+				playButton_.visible = play;
+				playStopButton_.visible = playStop;
+			}
+			
 			rightButton_.visible = right;
 		}
 		
