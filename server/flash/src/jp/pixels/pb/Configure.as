@@ -28,6 +28,6 @@ package jp.pixels.pb
 		public static const PAGE_H:Number = 400;
 		public static const CONTROL_W:Number = AREA_W - PREVIEW_W;
 		public static const CONTROL_H:Number = PREVIEW_H;
-		public static const EXTENSION:String = "jpg"
+		public static const EXTENSION:String = "png"
 	}
 }
