@@ -16,6 +16,7 @@ package jp.pixels.pb {
 		private const STATUS_NONE:String = "STATUS_NONE";
 		private const STATUS_ADDING:String = "STATUS_ADDING";
 		private const STATUS_REMOVING:String = "STATUS_REMOVING";
+		private const STATUS_SWAP:String = "STATUS_SWAP";
 		private const STATUS_REARRANGE:String = "STATUS_REARRANGE";
 		
 		private var queue_:Array = new Array();
@@ -49,7 +50,11 @@ package jp.pixels.pb {
 			}
 		}
 		
-		private function execute(request:String):void {
+		public function swap(srcIndex:int, destIndex:int):void {
+			execute(STATUS_SWAP, { src_index:srcIndex, dest_index:destIndex } );
+		}
+		
+		private function execute(request:String, params:Object=null):void {
 			status_ = request;
 			
 			var val:URLVariables = new URLVariables();
@@ -66,6 +71,18 @@ package jp.pixels.pb {
 				req.url = Configure.API_DELETE_URL;
 				l = new URLLoader();
 				l.addEventListener(Event.COMPLETE, onDeleteCompleteData);
+			}
+			else if (status_ == STATUS_SWAP) {
+				val["directory"] = encID_;
+				val["src_index"] = params["src_index"];
+				val["dest_index"] = params["dest_index"];
+				
+				req.url = Configure.API_SWAP_URL;
+				
+				log("STAUS_SWAP", val["directory"], val["src_index"], val["dest_index"], req.url);
+				
+				//l = new URLLoader();
+				//l.addEventListener(Event.COMPLETE, onSwapCompleteData);
 			}
 			else if (status_ == STATUS_REARRANGE) {
 				val["directory"] = encID_;
@@ -100,6 +117,12 @@ package jp.pixels.pb {
 			else {
 				execute(status_);
 			}
+		}
+		
+		private function onSwapCompleteData(e:Event):void {
+			var l:URLLoader = e.currentTarget as URLLoader;
+			l.removeEventListener(Event.COMPLETE, onSwapCompleteData);
+			notification(PBEvent.SWAP_FINISHIED);
 		}
 		
 		private function onRearrangeCompleteData(e:Event):void {

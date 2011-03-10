@@ -61,7 +61,11 @@ package jp.pixels.pb.panels {
 			
 			voice_ = new VoiceController(encID_);
 			voice_.addEventListener(PBEvent.UPDATE_VOICE_LIST, onUpdateVoiceList);
-			voice_.addEventListener(PBEvent.STOP_PLAYING_VOICE, onStopPlayingVoice)
+			voice_.addEventListener(PBEvent.STOP_PLAYING_VOICE, onStopPlayingVoice);
+			
+			server_ = new ServerCommunicator(encID_);
+			server_.addEventListener(PBEvent.SWAP_FINISHIED, onServerSwapFinished );
+			server_.addEventListener(PBEvent.REARRANGE_FINISHIED, onServerRearrangeFinished);
 		}
 		
 		private function setupPreviePanel():void {
@@ -220,8 +224,15 @@ package jp.pixels.pb.panels {
 		}
 		
 		private function onCatalogSwap(e:PBEvent):void {
-			store_.deployPages(e.info["start"], e.info["now"]);
+			var befIndex:int = e.info["start"];
+			var aftIndex:int = e.info["now"];
+			
+			store_.deployPages(befIndex, aftIndex);
 			previewPanel_.initBookFlip(store_, (bind_ ? Bookflip.BIND_LEFT : Bookflip.BIND_RIGHT));
+			
+			if (server_) {
+				server_.swap(befIndex, aftIndex);
+			}
 		}
 		
 		private function onPublishClick(e:MouseEvent):void {
@@ -242,11 +253,13 @@ package jp.pixels.pb.panels {
 			catalogPanel_.update(store_, bind);
 			previewPanel_.initBookFlip(store_, bind);
 			
-			server_ = new ServerCommunicator(encID_);
-			server_.addEventListener(PBEvent.REARRANGE_FINISHIED, onServerRearrangeFinished);
 			server_.rm(rmList);
 		}
 		
+		private function onServerSwapFinished(e:PBEvent):void {
+			trace(this, "SWAP_FINISHIED");
+		}
+			
 		private function onServerRearrangeFinished(e:PBEvent):void {
 		}
 		

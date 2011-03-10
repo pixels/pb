@@ -22,6 +22,7 @@ package jp.pixels.pb
 		public static const UPLOAD_COMPLETE_CLOSE:String = "UPLOAD_COMPLETE_CLOSE";
 		public static const CATALOG_SWAP:String = "CATALOG_SWAP";
 		public static const CATALOG_ARROW:String = "CATALOG_ARROW";
+		public static const SWAP_FINISHIED:String = "SWAP_FINISHIED";
 		public static const REARRANGE_FINISHIED:String = "REARRANGE_FINISHIED";
 		public static const UPDATE_VOICE_LIST:String = "UPDATE_VOICE_LIST";
 		public static const STOP_PLAYING_VOICE:String = "STOP_PLAYING_VOICE";
