@@ -3,6 +3,7 @@ package jp.pixels.pb.panels
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import jp.pixels.pb.Configure;
 	import jp.pixels.pb.gui.UIButton;
 	import jp.pixels.pb.PBEvent;
 	import jp.pixels.pb.ResourceProvider;
@@ -12,8 +13,6 @@ package jp.pixels.pb.panels
 	 * @author Yusuke Kikkawa
 	 */
 	public class PreviewControlPanel extends Sprite {
-		private const USE_VOIDE:Boolean = false;
-		
 		private var pageW_:Number;
 		private var pageH_:Number;
 		private var controller_:Sprite;
@@ -38,7 +37,7 @@ package jp.pixels.pb.panels
 			controller_.addChild(btn);
 			leftButton_ = btn;
 			
-			if (USE_VOIDE) {
+			if (Configure.USE_VOIDE) {
 				btn = createButton(ResourceProvider.getImage(ResourceProvider.IMAGE_ICON_MIC));
 				btn.addEventListener(MouseEvent.CLICK, onMicButton);
 				btn.x = controller_.width / 2 - btn.width / 2 - 32;
@@ -108,7 +107,7 @@ package jp.pixels.pb.panels
 		private function visibleControl(left:Boolean, mic:Boolean, micStop:Boolean, play:Boolean, playStop:Boolean, right:Boolean):void {
 			leftButton_.visible = left;
 			
-			if (USE_VOIDE) {
+			if (Configure.USE_VOIDE) {
 				micButton_.visible = mic;
 				micStopButton_.visible = micStop;
 				playButton_.visible = play;

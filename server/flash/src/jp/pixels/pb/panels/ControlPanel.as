@@ -49,8 +49,8 @@ package jp.pixels.pb.panels {
 			
 			registExternalInterface();
 			
-			
-			//onCallFromJS({key:"userID", value:"yktest"});
+			if (Configure.STANDALONE_TEST)
+				onCallFromJS({key:"userID", value:"yktest"});
 		}
 		
 		private function setup(encID:String):void {

@@ -8,7 +8,7 @@ package jp.pixels.pb
 	public class Configure {
 		public static const SECRET:String = "h5hDFuw4";
 		public static const HOST:String = "good-pb.com";
-		//public static const HOST:String = "10.0.1.128";
+		//public static const HOST:String = "10.0.1.102";
 		public static const BASE_URL:String = "http://" + HOST;
 		public static const APP_NAME:String = "myapp";
 		public static const API_UPLOAD_URL:String = BASE_URL + "/api/upload";
@@ -19,6 +19,8 @@ package jp.pixels.pb
 		public static const VOICE_PREFIX:String = "VOICE_";
 		
 		
+		public static const USE_VOIDE:Boolean = true;
+		public static const STANDALONE_TEST:Boolean = false;
 		public static const BACK_COLOR:uint = 0xEBEACE;
 		public static const AREA_W:Number = 970;
 		public static const AREA_H:Number = 560;
