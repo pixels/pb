@@ -64,7 +64,7 @@ package jp.pixels.pb.panels {
 			voice_.addEventListener(PBEvent.STOP_PLAYING_VOICE, onStopPlayingVoice);
 			
 			server_ = new ServerCommunicator(encID_);
-			server_.addEventListener(PBEvent.SWAP_FINISHIED, onServerSwapFinished );
+			server_.addEventListener(PBEvent.SWAP_FINISHIED, onServerSwapFinished);
 			server_.addEventListener(PBEvent.REARRANGE_FINISHIED, onServerRearrangeFinished);
 		}
 		
@@ -231,7 +231,9 @@ package jp.pixels.pb.panels {
 			previewPanel_.initBookFlip(store_, (bind_ ? Bookflip.BIND_LEFT : Bookflip.BIND_RIGHT));
 			
 			if (server_) {
-				server_.swap(befIndex, aftIndex);
+				var noBefPage:int = befIndex + 1;
+				var noAftPage:int = aftIndex + 1;
+				server_.swap(noBefPage, noAftPage);
 			}
 		}
 		

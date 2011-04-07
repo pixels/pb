@@ -81,8 +81,8 @@ package jp.pixels.pb {
 				
 				log("STAUS_SWAP", val["directory"], val["src_index"], val["dest_index"], req.url);
 				
-				//l = new URLLoader();
-				//l.addEventListener(Event.COMPLETE, onSwapCompleteData);
+				l = new URLLoader();
+				l.addEventListener(Event.COMPLETE, onSwapCompleteData);
 			}
 			else if (status_ == STATUS_REARRANGE) {
 				val["directory"] = encID_;
