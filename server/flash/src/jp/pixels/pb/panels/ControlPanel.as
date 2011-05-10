@@ -238,6 +238,8 @@ package jp.pixels.pb.panels {
 		}
 		
 		private function onPublishClick(e:MouseEvent):void {
+			pubBtn_.visible = false;
+			server_.publish(bind_, "title", "text", "author", store_.count, "actor", "audio_title", "audio_text");
 			externalInterfaceCall("publish", null);
 		}
 		

@@ -18,6 +18,7 @@ package jp.pixels.pb {
 		private const STATUS_REMOVING:String = "STATUS_REMOVING";
 		private const STATUS_SWAP:String = "STATUS_SWAP";
 		private const STATUS_REARRANGE:String = "STATUS_REARRANGE";
+		private const STATUS_PUBLISH:String = "STATUS_PUBLISH";
 		
 		private var queue_:Array = new Array();
 		private var status_:String = STATUS_NONE;
@@ -54,6 +55,10 @@ package jp.pixels.pb {
 			execute(STATUS_SWAP, { src_index:srcIndex, dest_index:destIndex } );
 		}
 		
+		public function publish(direction:int, title:String, text:String, author:String, pagecount:int, actor:String, audio_title:String, audio_text:String):void {
+			execute(STATUS_PUBLISH, { direction:direction, title:title, text:text, author:author, pagecount:pagecount, actor:actor, audio_title:audio_title, audio_text:audio_text } );
+		}
+		
 		private function execute(request:String, params:Object=null):void {
 			status_ = request;
 			
@@ -74,8 +79,8 @@ package jp.pixels.pb {
 			}
 			else if (status_ == STATUS_SWAP) {
 				val["directory"] = encID_;
-				val["src_index"] = params["src_index"];
-				val["dest_index"] = params["dest_index"];
+				//val["src_index"] = params["src_index"];
+				//val["dest_index"] = params["dest_index"];
 				
 				req.url = Configure.API_SWAP_URL;
 				
@@ -94,6 +99,17 @@ package jp.pixels.pb {
 				l = new URLLoader();
 				l.addEventListener(Event.COMPLETE, onRearrangeCompleteData);
 			}
+			else if (status_ == STATUS_PUBLISH) {
+				req.url = Configure.API_PUBLISH_URL;
+				l = new URLLoader();
+				l.addEventListener(Event.COMPLETE, onRearrangeCompleteData);
+			}
+			
+			for (var key:String in params) {
+				val[key] = params[key];
+			}
+			
+			trace(this, "status: " + status_, "val: " + val);
 			
 			if (req && l) {
 				req.method = URLRequestMethod.POST;

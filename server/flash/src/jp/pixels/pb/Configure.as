@@ -15,6 +15,7 @@ package jp.pixels.pb
 		public static const API_DELETE_URL:String = BASE_URL + "/api/delete";
 		public static const API_SWAP_URL:String = BASE_URL + "/api/swap";
 		public static const API_REARRANGE_URL:String = BASE_URL + "/api/rearrange";
+		public static const API_PUBLISH_URL:String = BASE_URL + "/api/publish";
 		public static const UPLOAD_URL:String = BASE_URL + "/upload";
 		public static const VOICE_PREFIX:String = "VOICE_";
 		
